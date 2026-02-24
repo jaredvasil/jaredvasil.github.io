@@ -1,5 +1,5 @@
 ---
-title: "Jared Vasil"
+title: "Jared Vasil's Professional Website"
 ---
 
 This is a Quarto website.
@@ -9,3 +9,5 @@ To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
 ```{r}
 1 + 1
 ```
+
+\*Test update: practicing GitHub push!\*
