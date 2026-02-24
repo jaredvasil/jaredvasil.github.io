@@ -11,3 +11,5 @@ To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
 ```
 
 \*Test update: practicing GitHub push!\*
+
+Having fun practing (:
