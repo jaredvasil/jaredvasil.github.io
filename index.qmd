@@ -2,4 +2,6 @@
 format: html
 ---
 
-Hello! My name is Jared Vasil. I'm a quantitatively-minded, experimental developmental psychologist who studies young children's communicative and conceptual development. My research investigates how communication shapes children's thinking about their social world and place within it, and how, in turn, children's thinking guides their communication.
+Hello! My name is Jared Vasil. I'm a developmental psychologist who studies young children's communicative and conceptual development. I use experiments to investigate how communication shapes children's thinking and vice versa. I'm primarily interested in how children think and talk about their social world, as this gives us a lens into how children think about themselves.
+
+This website includes my most recent CV, a list of my publications, and Bayesian modeling code that I have developed for data analysis. The code is written in R and uses tools from [tidyverse](papers/tidyverse.pdf) for data manipulation, [brms](papers/brms.pdf) for modeling, and [posterior](papers/posterior.pdf) for posterior analysis.
