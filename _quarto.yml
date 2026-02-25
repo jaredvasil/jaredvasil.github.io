@@ -8,8 +8,6 @@ website:
     left:
     - href: papers.qmd
     text: Publications
-    text: CV
-    text: Code
 
 format:
   html:
