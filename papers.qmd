@@ -2,7 +2,7 @@
 format: html
 ---
 
-This page lists my publications. PDFs of either the published article or the accepted manuscript are hyperlinked. Where applicable, beneath each publication is its data and code. The code is written in R and uses tools from [tidyverse](https://cran.r-project.org/package=tidyverse) for data manipulation, [brms](https://cran.r-project.org/package=brms) for modeling, and [posterior](https://cran.r-project.org/package=posterior) for posterior analysis. Clicking the "data and code" link will download a .zip file with a folder system that includes a .rproj file (i.e., an R project environment). The entire published analysis can be reproduced in one command by running the script within the folder's .rproj (save for any packages which may have to be installed by the user).
+This page lists my publications. PDFs of either the published article or the accepted manuscript are hyperlinked. Where applicable, beneath each publication is its data and code. Clicking the "data and code" link will download a .zip file with a folder system that includes a .rproj file (i.e., an R project environment). The entire published analysis can be reproduced in one command by running the script within the folder's .rproj (save for any packages which may have to be installed by the user). The code is written in R and uses tools from [tidyverse](https://cran.r-project.org/package=tidyverse) for data manipulation, [brms](https://cran.r-project.org/package=brms) for modeling, and [posterior](https://cran.r-project.org/package=posterior) for posterior analysis.
 
 # Peer-Reviewed Journal Articles
 
