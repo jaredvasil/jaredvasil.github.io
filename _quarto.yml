@@ -6,9 +6,9 @@ website:
   title: "Jared Vasil"
   navbar:
     left:
-      - href: index.html
+      - href: index.qmd
         text: Home
-      - href: papers.html
+      - href: papers.qmd
         text: Papers
 
 format:
