@@ -1,5 +1,6 @@
 ---
-title: "Jared Vasil"
+title: ""
+format: html
 ---
 
 This is a Quarto website.

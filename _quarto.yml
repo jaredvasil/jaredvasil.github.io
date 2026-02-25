@@ -3,6 +3,7 @@ project:
   output-dir: docs
 
 website:
+  title: "Jared Vasil"
   navbar:
     left:
       - href: index.qmd
