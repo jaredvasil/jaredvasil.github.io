@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Jared Vasil",
     "section": "",
-    "text": "Hello! My name is Jared Vasil. I’m a developmental psychologist who studies young children’s communicative and conceptual development. I use experiments to investigate children’s thought and language about the social world, as this provides a lens into how we come think about ourselves. Here you will find my CV and publications with their data and code. The code is written in R and uses tools from tidyverse for data manipulation, brms for modeling, and posterior for posterior analysis.\nkeywords: communication, conceptualization, development, evolution, Bayes"
+    "text": "Hello! My name is Jared Vasil. I’m a developmental psychologist who studies young children’s communicative, conceptual, and social development. I use experiments to investigate children’s thought and language about the social world, as this provides a lens into how we come think about ourselves. Here you will find my CV and publications with their data and code. The code is written in R and uses tools from tidyverse for data manipulation, brms for modeling, and posterior for posterior analysis.\nkeywords: communication, conceptualization, development, evolution, experimental, Bayes"
   },
   {
     "objectID": "papers.html",
