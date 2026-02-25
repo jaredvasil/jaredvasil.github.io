@@ -1,6 +1,5 @@
 ---
-title: "Publications"
-format: html-
+format: html
 ---
 
 # Peer-Reviewed Journal Articles
@@ -23,4 +22,4 @@ format: html-
 
 [**Vasil**, J., Badcock, P. B., Constant, A., Friston, K., & Ramstead, M. J. D. (2020). A World Unto Itself: Human Communication as Active Inference. *Frontiers in Psychology*, *11*. https://doi.org/10.3389/fpsyg.2020.00417](papers/vasil_etal_20.pdf)
 
-[Li, L., **Vasil**, J., & Negoita, S. (2020). Envisioning intention-oriented brain-to-speech decoding. *Journal of Consciousness Studies*, *27*(1–2), 71–93](https://www.ingentaconnect.com/content/imp/jcs/2020/00000027/f0020001/art00004)
+[Li, L., **Vasil**, J., & Negoita, S. (2020). Envisioning intention-oriented brain-to-speech decoding. *Journal of Consciousness Studies*, *27*(1–2), 71–93](papers/li_vasil_negoita_20.pdf)
