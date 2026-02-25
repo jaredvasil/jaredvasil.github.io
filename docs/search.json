@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Hello!",
     "section": "",
-    "text": "Hello!\nMy name is Jared Vasil. I’m a developmental psychologist who studies young children’s communicative, conceptual, and social development. I use experiments to investigate children’s thought and language about the social world, as this provides a lens into how we come think about ourselves. This website includes my CV and publications with data and code.\nkeywords: communication, conceptualization, development, evolution, Bayes"
+    "text": "Hello!\nMy name is Jared Vasil. I am a developmental psychologist interested in how people conceive of themselves. To study this topic, I conduct experiments of young children’s social and communicative behavior. Unencumbered by the culture and complicated psychology of adults, children’s social behavior provides a clear view into the content of our self conception.\nIn the spirit of transparency and reproducibility, this website is principally an open repository of the data that I collect and the code that I write to analyze it. Here is my CV.\nkeywords: communication, conceptualization, development, evolution, Bayes"
   },
   {
     "objectID": "papers.html",
