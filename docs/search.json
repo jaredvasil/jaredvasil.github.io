@@ -5,5 +5,12 @@
     "title": "Jared Vasil",
     "section": "",
     "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2\n\n\n*Test update: practicing GitHub push!*\nHaving fun practing!"
+  },
+  {
+    "objectID": "papers.html",
+    "href": "papers.html",
+    "title": "papers",
+    "section": "",
+    "text": "My papers.\n- PDF of [Li and Vasil (2026)](papers/li_vasil_26.pdf)"
   }
 ]
