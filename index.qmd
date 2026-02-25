@@ -2,14 +2,4 @@
 format: html
 ---
 
-This is a Quarto website.
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-```{r}
-1 + 1
-```
-
-\*Test update: practicing GitHub push!\*
-
-Having fun
+Hello! I am Jared Vasil. I'm a quantitatively-minded developmental psychologist who studies young children's social-conceptual development.
