@@ -28,7 +28,7 @@ This page lists my publications. PDFs of either the published article or the acc
 
 -   Data and Code
 
-[**Vasil**, J., & Tomasello, M. (2022). Effects of “we”-framing on young children’s commitment, sharing, and helping. *Journal of Experimental Child Psychology*, *214*, 105278. https://doi.org/10.1016/j.jecp.2021.105278](c)
+[**Vasil**, J., & Tomasello, M. (2022). Effects of “we”-framing on young children’s commitment, sharing, and helping. *Journal of Experimental Child Psychology*, *214*, 105278. https://doi.org/10.1016/j.jecp.2021.105278](papers/vasil_tomasello_22.pdf)
 
 -   Data and Code
 
