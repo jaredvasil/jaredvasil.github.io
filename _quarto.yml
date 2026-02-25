@@ -9,7 +9,7 @@ website:
       - href: index.qmd
         text: Home
       - href: papers.qmd
-        text: Papers
+        text: Publications
 
 format:
   html:
