@@ -3,6 +3,8 @@ title: "papers"
 format: html
 ---
 
-My papers.
-
-\- PDF of \[Li and Vasil (2026)\](papers/li_vasil_26.pdf).
+\# Papers\
+\
+My papers.\
+\
+- \[Li and Vasil (2026)\](papers/li_vasil_26.pdf)
