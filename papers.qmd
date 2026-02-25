@@ -1,5 +1,6 @@
 ---
-format: html
+title: "Publications"
+format: html-
 ---
 
 # Peer-Reviewed Journal Articles
