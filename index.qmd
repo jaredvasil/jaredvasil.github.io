@@ -1,5 +1,5 @@
 ---
-title: "Jared Vasil's Professional Website"
+title: "Jared Vasil"
 ---
 
 This is a Quarto website.
