@@ -5,7 +5,11 @@ format: html
 
 My papers.
 
-[Li, L., & \*Vasil\*, J. (2025). Phylogenetic, ontogenetic, and logical critiques of mental state minimalism. *European Journal of Developmental Psychology*, 1–14. https://doi.org/10.1080/17405629.2025.2607730](papers/li_vasil_25.pdf)
+\<a href="papers/li_vasil_25.pdf"\>\
+Li, L., & \<strong\>Vasil\</strong\>, J. (2025). Phylogenetic, ontogenetic, and logical critiques of mental state minimalism. \<em\>European Journal of Developmental Psychology\</em\>, 1–14. https://doi.org/10.1080/17405629.2025.2607730\
+\</a\>
+
+[Li, L., & \*\*Vasil\*\*, J. (2025). Phylogenetic, ontogenetic, and logical critiques of mental state minimalism. European Journal of Developmental Psychology, 1–14. https://doi.org/10.1080/17405629.2025.2607730](papers/li_vasil_25.pdf)
 
 [Vasil, J., Badcock, P. B., Constant, A., Friston, K., & Ramstead, M. J. D. (2020). A World Unto Itself: Human Communication as Active Inference. *Frontiers in Psychology*, *11*. https://doi.org/10.3389/fpsyg.2020.00417](papers/vasil_etal_20.pdf)
 
