@@ -16,7 +16,7 @@ format: html
 
 [**Vasil**, J. (2023). A New Look at Young Children’s Referential Informativeness. *Perspectives on Psychological Science*, *18*(3), 624–648. https://doi.org/10.1177/17456916221112072](papers/vasil_23.pdf)
 
-[**Vasil**, J., & Tomasello, M. (2022). Effects of “we”-framing on young children’s commitment, sharing, and helping. *Journal of Experimental Child Psychology*, *214*, 105278. https://doi.org/10.1016/j.jecp.2021.105278](papers/vasil_tomasello_22.pdf)
+[**Vasil**, J., & Tomasello, M. (2022). Effects of “we”-framing on young children’s commitment, sharing, and helping. *Journal of Experimental Child Psychology*, *214*, 105278. https://doi.org/10.1016/j.jecp.2021.105278](c)
 
 [**Vasil**, J. (2022). The study of rational framing effects needs developmental psychology. *The Behavioral and Brain Sciences*, *45*, e243. https://doi.org/10.1017/S0140525X22000930](papers/vasil_22.pdf)
 
