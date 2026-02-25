@@ -6,6 +6,54 @@ format: html
 
 My name is Jared Vasil. I am a developmental psychologist interested in how people conceive of themselves. To study this topic, I conduct experiments of young children's social and communicative behavior. Unencumbered by the culture and complicated psychology of adults, children's social behavior provides a clear view into the content of our self conception.
 
-In the spirit of transparency and reproducibility, this website is principally an open repository of the data that I collect and the code that I write to analyze it. [Here is my CV](papers/cv_feb26.pdf).
+In the spirit of transparency and reproducibility, this website is an open repository of my publications along with data and analytical code. [Here is my CV](papers/cv_feb26.pdf).
 
 **keywords**: communication, conceptualization, development, evolution, Bayes
+
+# Peer-Reviewed Journal Articles
+
+PDFs of either the published article or the accepted manuscript are hyperlinked. My name is bolded and my mentees' last names are followed by an asterisk. These individuals contributed substantially to study conceptualization, design, data collection, and analysis *en route* to a senior thesis.
+
+Where applicable, beneath each publication is its data and code. Clicking the "Data and Code" link will download a .zip file that contains a folder system with a .rproj file (i.e., an R project environment). The published analysis can be reproduced by running the script within the .rproj (save for any packages which may have to be installed by the user). The code is written in R and uses tools from [tidyverse](https://cran.r-project.org/package=tidyverse) for data manipulation, [brms](https://cran.r-project.org/package=brms) for modeling, and [posterior](https://cran.r-project.org/package=posterior) for posterior analysis. All errors are my responsibility.
+
+11. [Li, L., & **Vasil**, J. (2025). Phylogenetic, ontogenetic, and logical critiques of mental state minimalism. *European Journal of Developmental Psychology*, 1–14. https://doi.org/10.1080/17405629.2025.2607730](papers/li_vasil_25.pdf)
+
+<!-- -->
+
+10. [**Vasil**, J. (2025). Shared intentionality may have been favored by persistence hunting in *Homo erectus*. *Behavioral and Brain Sciences*, *48*, e20. https://doi.org/10.1017/S0140525X24000979](papers/vasil_25.pdf)
+
+<!-- -->
+
+9.  [**Vasil**, J., Provençal\*, M., & Tomasello, M. (2024). Effects of “We”-framing and partner number on 2- and 3-year-olds’ sense of commitment. *Cognitive Development*, *72*, 101511. https://doi.org/10.1016/j.cogdev.2024.101511](papers/vasil_provencal_tomasello_24.pdf)
+
+-   Data and code for Vasil, Provençal, and Tomasello (2024)
+
+8.  [**Vasil**, J., Price\*, D., & Tomasello, M. (2024). Thought and language: Effects of group-mindedness on young children’s interpretation of exclusive we. *Child Development*, *95*(3), e155–e163. https://doi.org/10.1111/cdev.14049](papers/vasil_price_tomasello_24.pdf)
+
+-   Data and code for Vasil, Price, and Tomasello (2024)
+
+7.  [**Vasil**, J., Capoot\*, C., & Tomasello, M. (2024). Effects of group entitativity on young English-speaking children’s interpretation of inclusive We. *PLOS ONE*, *19*(7), e0306556. https://doi.org/10.1371/journal.pone.0306556](papers/vasil_capoot_tomasello_24.pdf)
+
+-   Data and code for Vasil, Capoot, and Tomasello (2024)
+
+6.  [**Vasil**, J. (2023). A New Look at Young Children’s Referential Informativeness. *Perspectives on Psychological Science*, *18*(3), 624–648. https://doi.org/10.1177/17456916221112072](papers/vasil_23.pdf)
+
+<!-- -->
+
+5.  [**Vasil**, J., Moore, C., & Tomasello, M. (2023). Thought and language: Association of groupmindedness with young English-speaking children’s production of pronouns. *First Language*, *43*(5), 516–538. https://doi.org/10.1177/01427237231169398](papers/vasil_moore_tomasello_23.pdf)
+
+-   Data and code for Vasil, Moore, and Tomasello (2023)
+
+4.  [**Vasil**, J., & Tomasello, M. (2022). Effects of “we”-framing on young children’s commitment, sharing, and helping. *Journal of Experimental Child Psychology*, *214*, 105278. https://doi.org/10.1016/j.jecp.2021.105278](papers/vasil_tomasello_22.pdf)
+
+-   Data and code for Vasil and Tomasello (2022)
+
+3.  [**Vasil**, J. (2022). The study of rational framing effects needs developmental psychology. *The Behavioral and Brain Sciences*, *45*, e243. https://doi.org/10.1017/S0140525X22000930](papers/vasil_22.pdf)
+
+<!-- -->
+
+2.  [**Vasil**, J., Badcock, P. B., Constant, A., Friston, K., & Ramstead, M. J. D. (2020). A World Unto Itself: Human Communication as Active Inference. *Frontiers in Psychology*, *11*. https://doi.org/10.3389/fpsyg.2020.00417](papers/vasil_etal_20.pdf)
+
+<!-- -->
+
+1.  [Li, L., **Vasil**, J., & Negoita, S. (2020). Envisioning intention-oriented brain-to-speech decoding. *Journal of Consciousness Studies*, *27*(1–2), 71–93](papers/li_vasil_negoita_20.pdf)

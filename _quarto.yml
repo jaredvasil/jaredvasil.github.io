@@ -4,11 +4,6 @@ project:
 
 website:
   title: "Jared Vasil"
-  navbar:
-    left:
-    - text: Publications
-      href: papers.qmd
-
 
 format:
   html:
