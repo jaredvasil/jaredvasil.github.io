@@ -7,7 +7,7 @@ website:
   navbar:
     left:
     - text: Publications
-    href: papers.qmd
+      href: papers.qmd
 
 
 format:
