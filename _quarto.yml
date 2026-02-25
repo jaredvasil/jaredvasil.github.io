@@ -6,13 +6,10 @@ website:
   title: "Jared Vasil"
   navbar:
     left:
-      - href: papers.qmd
-        text: Publications
-        - href: cv.qmd
-        text: CV
-        text: Code
-
-
+    - href: papers.qmd
+    text: Publications
+    text: CV
+    text: Code
 
 format:
   html:
