@@ -12,7 +12,7 @@ website:
 
 format:
   html:
-    output-dir: docs      
+    output-dir: _site      
     theme:
       - yeti
       - brand
