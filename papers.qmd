@@ -3,18 +3,15 @@ title: "Papers"
 format: html
 ---
 
-\# Papers\
+\
 \
 My papers.\
 
-\<ol start="10"\>\
-\<li\>[\[Li, L., & Vasil, J. (2025). Phylogenetic, ontogenetic, and logical critiques of mental state minimalism. *European Journal of Developmental Psychology*, *0*(0), 1–14. https://doi.org/10.1080/17405629.2025.2607730\](li_vasil_26.pdf)](Li, L., & Vasil, J. (2025). Phylogenetic, ontogenetic, and logical critiques of mental state minimalism. European Journal of Developmental Psychology, 0(0), 1–14. https://doi.org/10.1080/17405629.2025.2607730)\</li\>
+[Li, L., & Vasil, J. (2025). Phylogenetic, ontogenetic, and logical critiques of mental state minimalism. *European Journal of Developmental Psychology*, 1–14. https://doi.org/10.1080/17405629.2025.2607730](li_vasil_25.pdf)
 
-\
-\<li\>\[Vasil, J., Badcock, P. B., Constant, A., Friston, K., & Ramstead, M. J. D. (2020). A World Unto Itself: Human Communication as Active Inference. *Frontiers in Psychology*, *11*. https://doi.org/10.3389/fpsyg.2020.00417\](vasil_etal_20.pdf)\</li\>
+[Vasil, J., Badcock, P. B., Constant, A., Friston, K., & Ramstead, M. J. D. (2020). A World Unto Itself: Human Communication as Active Inference. *Frontiers in Psychology*, *11*. https://doi.org/10.3389/fpsyg.2020.00417](vasil_etal_20.pdf)
 
-\
-\<li\>Li, L., Vasil, J., & Negoita, S. (2020). Envisioning intention-oriented brain-to-speech decoding. *Journal of Consciousness Studies*, *27*(1–2), 71–93.\</li\>
+Li, L., Vasil, J., & Negoita, S. (2020). Envisioning intention-oriented brain-to-speech decoding. *Journal of Consciousness Studies*, *27*(1–2), 71–93
 
 \
 \</ol\>
