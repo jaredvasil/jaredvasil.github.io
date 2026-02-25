@@ -9,7 +9,7 @@ format: html
 
 [**Vasil**, J. (2025). Shared intentionality may have been favored by persistence hunting in Homo erectus. *Behavioral and Brain Sciences*, *48*, e20. https://doi.org/10.1017/S0140525X24000979](papers/vasil_25.pdf)
 
-[**Vasil**, J., Provençal, M., & Tomasello, M. (2024). Effects of “We”-framing and partner number on 2- and 3-year-olds’ sense of commitment. *Cognitive Development*, *72*, 101511. https://doi.org/10.1016/j.cogdev.2024.101511](papers/vil_provencal_tomasello_24.pdf)
+[**Vasil**, J., Provençal, M., & Tomasello, M. (2024). Effects of “We”-framing and partner number on 2- and 3-year-olds’ sense of commitment. *Cognitive Development*, *72*, 101511. https://doi.org/10.1016/j.cogdev.2024.101511](papers/vasil_provencal_tomasello_24.pdf)
 
 [**Vasil**, J., Price, D., & Tomasello, M. (2024). Thought and language: Effects of group-mindedness on young children’s interpretation of exclusive we. *Child Development*, *95*(3), e155–e163. https://doi.org/10.1111/cdev.14049](papers/vasil_price_tomasello_24.pdf)
 
@@ -21,6 +21,6 @@ format: html
 
 [**Vasil**, J. (2022). The study of rational framing effects needs developmental psychology. *The Behavioral and Brain Sciences*, *45*, e243. https://doi.org/10.1017/S0140525X22000930](papers/vasil_22.pdf)
 
-[**Vasil**, J., Badcock, P. B., Constant, A., Friston, K., & Ramstead, M. J. D. (2020). A World Unto Itself: Human Communication as Active Inference. *Frontiers in Psychology*, *11*. https://doi.org/10.3389/fpsyg.2020.00417](papers/vil_etal_20.pdf)
+[**Vasil**, J., Badcock, P. B., Constant, A., Friston, K., & Ramstead, M. J. D. (2020). A World Unto Itself: Human Communication as Active Inference. *Frontiers in Psychology*, *11*. https://doi.org/10.3389/fpsyg.2020.00417](papers/vasil_etal_20.pdf)
 
 [Li, L., **Vasil**, J., & Negoita, S. (2020). Envisioning intention-oriented brain-to-speech decoding. *Journal of Consciousness Studies*, *27*(1–2), 71–93](https://www.ingentaconnect.com/content/imp/jcs/2020/00000027/f0020001/art00004)
