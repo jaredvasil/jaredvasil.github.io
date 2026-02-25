@@ -4,7 +4,7 @@ format: html
 
 # Peer-Reviewed Journal Articles
 
-[Li, L., & **Vasil**, J. (2025). Phylogenetic, ontogenetic, and logical critiques of mental state minimalism. European Journal of Developmental Psychology, 1–14. https://doi.org/10.1080/17405629.2025.2607730](papers/li_vasil_25.pdf)
+[Li, L., & **Vasil**, J. (2025). Phylogenetic, ontogenetic, and logical critiques of mental state minimalism. *European Journal of Developmental Psychology*, 1–14. https://doi.org/10.1080/17405629.2025.2607730](papers/li_vasil_25.pdf)
 
 [**Vasil**, J. (2025). Shared intentionality may have been favored by persistence hunting in *Homo erectus*. *Behavioral and Brain Sciences*, *48*, e20. https://doi.org/10.1017/S0140525X24000979](papers/vasil_25.pdf)
 
