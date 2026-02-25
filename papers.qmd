@@ -1,5 +1,5 @@
 ---
-title-block-style: none
+title: ""
 format: html
 ---
 
