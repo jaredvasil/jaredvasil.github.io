@@ -6,7 +6,7 @@ format: html
 
 My name is Jared Vasil. I am a developmental psychologist interested in how people conceive of themselves. To study this topic, I conduct experiments of young children's social and communicative behavior, like joint commitment and linguistic reference. Unencumbered by the culture and complicated psychology of adults, children's behavior provides a clear view into the content of our self conception.
 
-In the spirit of transparency and reproducibility, this website is an open repository of my publications along with data and analytical code. [Here is my CV](papers/cv_feb26.pdf).
+In the spirit of transparency and reproducibility, this website is an open repository of all of my publications, data, and analytical code. [Here is my CV](papers/cv_feb26.pdf).
 
 **keywords**: communication, conceptualization, development, evolution, Bayes
 
