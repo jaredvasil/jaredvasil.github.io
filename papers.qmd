@@ -7,4 +7,4 @@ format: html
 \
 My papers.\
 \
-- PDF of \[Li and Vasil (2026)\](papers/li_vasil_26.pdf)(papers/li_vasil_26.pdf).
+- PDF of [Li and Vasil (2026)](papers/li_vasil_26.pdf).
