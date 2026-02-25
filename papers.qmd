@@ -6,7 +6,7 @@ format: html
 
 [Li, L., & **Vasil**, J. (2025). Phylogenetic, ontogenetic, and logical critiques of mental state minimalism. European Journal of Developmental Psychology, 1–14. https://doi.org/10.1080/17405629.2025.2607730](papers/li_vasil_25.pdf)
 
-[**Vasil**, J. (2025). Shared intentionality may have been favored by persistence hunting in Homo erectus. *Behavioral and Brain Sciences*, *48*, e20. https://doi.org/10.1017/S0140525X24000979](papers/vasil_25.pdf)
+[**Vasil**, J. (2025). Shared intentionality may have been favored by persistence hunting in *Homo erectus*. *Behavioral and Brain Sciences*, *48*, e20. https://doi.org/10.1017/S0140525X24000979](papers/vasil_25.pdf)
 
 [**Vasil**, J., Provençal, M., & Tomasello, M. (2024). Effects of “We”-framing and partner number on 2- and 3-year-olds’ sense of commitment. *Cognitive Development*, *72*, 101511. https://doi.org/10.1016/j.cogdev.2024.101511](papers/vasil_provencal_tomasello_24.pdf)
 
