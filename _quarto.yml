@@ -1,5 +1,6 @@
 project:
   type: website
+  output-dir: _site
 
 website:
   title: "Jared Vasil"
@@ -12,11 +13,6 @@ website:
 
 format:
   html:
-    output-dir: _site      
-    theme:
-      - yeti
-      - brand
+    theme: yeti
     css: styles.css
     toc: true
-
-editor: visual
