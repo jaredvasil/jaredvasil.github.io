@@ -4,7 +4,7 @@ format: html
 
 # Hello!
 
-My name is Jared Vasil. I am a developmental psychologist interested in how people conceive of themselves. To study this topic, I investigate young children's social and communicative behavior, like their joint commitment and linguistic reference. Children's behavior clarifies what is opaque in adults, such as the content of our self-conception. My theoretical orientation inherits from [Mead](https://press.uchicago.edu/ucp/books/book/chicago/M/bo20099389.html), [Vygotsky](https://mitpress.mit.edu/9780262304917/thought-and-language/), and [Tomasello](https://www.hup.harvard.edu/books/9780674986831).
+My name is Jared Vasil. I am a developmental psychologist interested in how people think about themselves. To study this topic, I investigate young children's social and communicative behavior, like their joint commitment and linguistic reference. Children's behavior clarifies what is opaque in adults, such as the content of our self-conception. My theoretical orientation inherits from [Mead](https://press.uchicago.edu/ucp/books/book/chicago/M/bo20099389.html), [Vygotsky](https://mitpress.mit.edu/9780262304917/thought-and-language/), and [Tomasello](https://www.hup.harvard.edu/books/9780674986831).
 
 In the spirit of transparency and reproducibility, this website is an open repository of all of my peer-reviewed journal articles, data, and analytical code. [Here is my CV](papers/cv_feb26.pdf).
 
