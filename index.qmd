@@ -25,7 +25,7 @@ Instructions for running the data and code: Where applicable, beneath each publi
 <!-- -->
 
 9.  [**Vasil**, J., Provençal\*, M., & Tomasello, M. (2024). Effects of “We”-framing and partner number on 2- and 3-year-olds’ sense of commitment. *Cognitive Development*, *72*, 101511. https://doi.org/10.1016/j.cogdev.2024.101511](papers/vasil_provencal_tomasello_24.pdf)
-    -   [Data and code](data_and_code/data_and_code_for_vasil_provencal_tomasello.zip)
+    -   [Data and code](data_and_code/data_and_code_for_vasil_provencal_tomasello_2024.zip)
 
 <!-- -->
 
