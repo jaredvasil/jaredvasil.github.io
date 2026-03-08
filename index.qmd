@@ -46,7 +46,7 @@ Instructions for running the data and code: Where applicable, beneath each publi
 <!-- -->
 
 5.  [**Vasil**, J., Moore, C., & Tomasello, M. (2023). Thought and language: Association of groupmindedness with young English-speaking children’s production of pronouns. *First Language*, *43*(5), 516–538. https://doi.org/10.1177/01427237231169398](papers/vasil_moore_tomasello_23.pdf)
-    -   [Data and code](data_and_code/data_and_code_for_vasil_moore_tomasello_2023.zip)
+    -   [Data and code (redirects to OSF repository due to large data file)](https://osf.io/65wex/overview)
 
 <!-- -->
 
