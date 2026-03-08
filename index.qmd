@@ -32,7 +32,7 @@ Instructions for running the data and code: Where applicable, beneath each publi
 <!-- -->
 
 8.  [**Vasil**, J., Price\*, D., & Tomasello, M. (2024). Thought and language: Effects of group-mindedness on young children’s interpretation of exclusive we. *Child Development*, *95*(3), e155–e163. https://doi.org/10.1111/cdev.14049](papers/vasil_price_tomasello_24.pdf)
-    -   [Data and code](data_and_code/data_and_code_for_vasil_price_tomasello_2024.zip.zip)
+    -   [Data and code](data_and_code/data_and_code_for_vasil_price_tomasello_2024.zip)
 
 <!-- -->
 
