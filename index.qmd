@@ -8,7 +8,7 @@ My name is Jared Vasil. I am a developmental psychologist interested in how peop
 
 I am employed as a Postdoctoral Research Associate in Marjorie Rhodes' Conceptual Developmental and Social Cognition Lab at New York University. I earned my PhD from Duke University in 2024 under the supervision of Michael Tomasello.
 
-In the spirit of transparency and reproducibility, this website is an open repository of all of my peer-reviewed journal articles, along with their associated data and annotated analytical code (written in R). [Here is my CV](papers/cv_feb26.pdf) and [Google Scholar page](https://scholar.google.com/citations?user=h2CNbSMAAAAJ&hl=en). [Here is a pipeline](https://rpubs.com/jaredvasil/1382030) that I am preparing for bespoke, simulation-based Bayesian sample size planning.
+In the spirit of transparency and reproducibility, this website is an open repository of all of my peer-reviewed journal articles, along with their associated data and analytical code (written in R). [Here is my CV](papers/cv_feb26.pdf) and [Google Scholar page](https://scholar.google.com/citations?user=h2CNbSMAAAAJ&hl=en). [Here is a pipeline](https://rpubs.com/jaredvasil/1382030) that I am preparing for bespoke, simulation-based Bayesian sample size planning.
 
 **keywords**: communication, conceptualization, development, evolution, Bayes
 
@@ -32,7 +32,7 @@ Instructions for running the data and code: Where applicable, beneath each publi
 <!-- -->
 
 8.  [**Vasil**, J., Price\*, D., & Tomasello, M. (2024). Thought and language: Effects of group-mindedness on young children’s interpretation of exclusive we. *Child Development*, *95*(3), e155–e163. https://doi.org/10.1111/cdev.14049](papers/vasil_price_tomasello_24.pdf)
-    -   [Data and code](sd)
+    -   [Data and code](data_and_code_for_vasil_price_tomasello_2024.zip)
 
 <!-- -->
 
@@ -46,12 +46,12 @@ Instructions for running the data and code: Where applicable, beneath each publi
 <!-- -->
 
 5.  [**Vasil**, J., Moore, C., & Tomasello, M. (2023). Thought and language: Association of groupmindedness with young English-speaking children’s production of pronouns. *First Language*, *43*(5), 516–538. https://doi.org/10.1177/01427237231169398](papers/vasil_moore_tomasello_23.pdf)
-    -   [Data and code](sd)
+    -   [Data and code](data_and_code/data_and_code_for_vasil_moore_tomasello_2023.zip)
 
 <!-- -->
 
 4.  [**Vasil**, J., & Tomasello, M. (2022). Effects of “we”-framing on young children’s commitment, sharing, and helping. *Journal of Experimental Child Psychology*, *214*, 105278. https://doi.org/10.1016/j.jecp.2021.105278](papers/vasil_tomasello_22.pdf)
-    -   [Data and code](sdf)
+    -   [Data and code](data_and_code/data_and_code_for_vasil_tomasello_2022.zip)
 
 <!-- -->
 
