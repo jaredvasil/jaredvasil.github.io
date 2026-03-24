@@ -8,7 +8,7 @@ My name is Jared Vasil. I am a developmental psychologist interested in how peop
 
 I am employed as a Postdoctoral Research Associate in Marjorie Rhodes' Conceptual Developmental and Social Cognition Lab at New York University. I earned my PhD from Duke University in 2024 under the supervision of Michael Tomasello.
 
-In the spirit of transparency and reproducibility, this website is an open repository of all of my peer-reviewed journal articles, along with their associated data and analytical code (written in R). [Here is ](papers/cv_feb26.pdf)[my](papers/cv_mar26.pdf)[ CV](papers/cv_feb26.pdf) and [Google Scholar page](https://scholar.google.com/citations?user=h2CNbSMAAAAJ&hl=en). [Here is a pipeline](https://rpubs.com/jaredvasil/1382030) that I am preparing for bespoke, simulation-based Bayesian sample size planning.
+In the spirit of transparency and reproducibility, this website is an open repository of all of my peer-reviewed journal articles, along with their associated data and analytical code (written in R). [Here is my CV](papers/cv_mar26.pdf) and [Google Scholar page](https://scholar.google.com/citations?user=h2CNbSMAAAAJ&hl=en). [Here is a pipeline](https://rpubs.com/jaredvasil/1382030) that I am preparing for bespoke, simulation-based Bayesian sample size planning.
 
 **keywords**: communication, conceptualization, development, evolution, Bayes
 
