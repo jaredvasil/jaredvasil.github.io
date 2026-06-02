@@ -4,11 +4,11 @@ format: html
 
 # Hello!
 
-My name is Jared Vasil. I am a developmental psychologist interested in how people think about themselves. To study this topic, I investigate young children's social and communicative behavior, like their joint commitment and linguistic reference. Children's behavior clarifies what is opaque in adults, such as the content of our self-conception.
+My name is Jared Vasil ([CV](papers/cv_mar26.pdf), [Google Scholar](https://scholar.google.com/citations?user=h2CNbSMAAAAJ&hl=en)). I am a developmental psychologist interested in how people think about themselves. To study this topic, I investigate young children's social and communicative behavior, like their joint commitment and linguistic reference. Children's behavior clarifies what is opaque in adults, such as the content of our self-conception.
 
 I am a Postdoctoral Research Associate in Marjorie Rhodes' Conceptual Developmental and Social Cognition Lab at New York University. I earned my PhD from Duke University in 2024 under the supervision of Michael Tomasello.
 
-All of my peer-reviewed journal articles, code, and data are below. [Here is my CV](papers/cv_mar26.pdf) and [Google Scholar page](https://scholar.google.com/citations?user=h2CNbSMAAAAJ&hl=en). Here is a [pipeline](https://rpubs.com/jaredvasil/1382030) (in progress) for simulation-based Bayesian sample size planning.
+All of my peer-reviewed journal articles, code, and data are below. Here is a [pipeline](https://rpubs.com/jaredvasil/1382030) for simulation-based Bayesian sample size planning.
 
 **keywords**: communication, conceptualization, development, evolution, Bayes
 
