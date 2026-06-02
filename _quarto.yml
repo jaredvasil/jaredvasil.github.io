@@ -10,4 +10,3 @@ format:
     theme: darkly
     css: styles.css
     toc: false
-    mainfont: serif
