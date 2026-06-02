@@ -7,6 +7,6 @@ website:
 
 format:
   html:
-    theme: superhero
+    theme: cyborg
     css: styles.css
     toc: false
