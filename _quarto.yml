@@ -7,6 +7,6 @@ website:
 
 format:
   html:
-    theme: flatly
+    theme: superhero
     css: styles.css
     toc: false
