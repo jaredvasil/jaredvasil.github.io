@@ -7,6 +7,6 @@ website:
 
 format:
   html:
-    theme: cyborg
+    theme: darkly
     css: styles.css
     toc: false
