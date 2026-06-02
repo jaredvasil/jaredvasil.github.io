@@ -8,7 +8,7 @@ My name is Jared Vasil ([CV](papers/cv_mar26.pdf), [Google Scholar](https://scho
 
 I am a Postdoctoral Research Associate in Marjorie Rhodes' Conceptual Developmental and Social Cognition Lab at New York University. I earned my PhD from Duke University in 2024 under the supervision of Michael Tomasello.
 
-All of my peer-reviewed journal articles, code, and data are below. Here is a [pipeline](https://rpubs.com/jaredvasil/1382030) for simulation-based Bayesian sample size planning.
+Below are my peer-reviewed journal articles with their associated data and code. And [here is a pipeline](https://rpubs.com/jaredvasil/1382030) for simulation-based Bayesian sample size planning.
 
 **keywords**: communication, conceptualization, development, evolution, Bayes
 
@@ -16,7 +16,11 @@ All of my peer-reviewed journal articles, code, and data are below. Here is a [p
 
 PDFs of either the published article or the accepted manuscript are hyperlinked. Asterisks indicate mentees. These individuals contributed substantively to study conceptualization, design, data collection, and analysis *en route* to a thesis.
 
-*Replication instructions*: Where applicable, beneath each publication is its data and code. Clicking the "data and code" link will download a .zip file. Inside of this .zip file is a folder system with a .Rproj file. The published analysis can be reproduced by running the .r or .rmd script within the .rproj file. The folder system is prepared so that the entire analysis pipeline - from data import to posterior inference, including figures and tables - can be completed in one command (plus commands for package installation, if any). I principally use tools from [tidyverse](https://cran.r-project.org/web/packages/tidyverse/index.html) for data manipulation, [brms](https://cran.r-project.org/web/packages/brms/index.html) for modeling, [posterior](https://cran.r-project.org/web/packages/posterior/index.html) for posterior analysis, and [tidybayes](https://cran.r-project.org/web/packages/tidybayes/index.html) for visualization. All errors are my responsibility.
+*Replication instructions*: Data and code are below their associated publication. Clicking the "data and code" hyperlink will download a .zip file. Inside of this .zip file is a folder system with a .Rproj file. The published analysis can be reproduced by running the .r or .rmd script within the .rproj file. The folder system is preconfigured so that the entire analysis pipeline - from data import to posterior inference, including figures and tables - can be completed in one command (plus commands for package installation, if any).
+
+I principally use tools from [tidyverse](https://cran.r-project.org/web/packages/tidyverse/index.html) for data manipulation, [brms](https://cran.r-project.org/web/packages/brms/index.html) for modeling, [posterior](https://cran.r-project.org/web/packages/posterior/index.html) for posterior analysis, and [tidybayes](https://cran.r-project.org/web/packages/tidybayes/index.html) for visualization. All errors are my responsibility.
+
+## Articles
 
 11. [Li, L., & **Vasil**, J. (2025). Phylogenetic, ontogenetic, and logical critiques of mental state minimalism. *European Journal of Developmental Psychology*, 1–14. https://doi.org/10.1080/17405629.2025.2607730](papers/li_vasil_25.pdf)
 
