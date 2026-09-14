@@ -12,7 +12,7 @@ My name is Jared Vasil ([CV](papers/cv_mar26.pdf), [Google Scholar](https://scho
 
 Currently, I am a Postdoctoral Fellow at the [Center for Possible Minds](https://www.possibleminds.org/) and in the [COMPARE Lab](https://www.comparelab.org/) at Indiana University. I earned my PhD from Duke University in 2024 under the supervision of Michael Tomasello.
 
-Below are my peer-reviewed journal articles with their associated data and code.
+My peer-reviewed journal articles with their associated data and code are below.
 
 **keywords**: development; evolution; self-conception; communication; collaboration; Bayes
 
