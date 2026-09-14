@@ -1,0 +1,249 @@
+participant_id,sex,age,race_recoded,income_recoded,education,e1_recoded,condition_discourse,condition_framing,location,exclude_reason,ref_item,ref_ling
+final1,m,4.306849315068493,White,>70k,graduate,alissa,conventional,we,0,included,ball,np_mod
+final1,m,4.306849315068493,White,>70k,graduate,alissa,conventional,we,0,included,stick,np_mod
+final2,m,4.03013698630137,White,NA,college,kaelin,conventional,you,1,included,ball,no_ling_ref
+final2,m,4.03013698630137,White,NA,college,kaelin,conventional,you,1,included,stick,no_ling_ref
+final3,f,4.715068493150685,White,NA,graduate,kaelin,conventional,we,1,included,stick,no_ling_ref
+final3,f,4.715068493150685,White,NA,graduate,kaelin,conventional,we,1,included,ball,no_ling_ref
+final4,m,4.073972602739726,White,>70k,graduate,kaelin,conventional,we,0,included,ball,np_mod
+final4,m,4.073972602739726,White,>70k,graduate,kaelin,conventional,we,0,included,stick,np_unmod
+final5,f,4.068493150684931,Latine,>70k,college,kaelin,conventional,you,0,nonenglish,-,-
+final5,f,4.068493150684931,Latine,>70k,college,kaelin,conventional,you,0,nonenglish,-,-
+final6,f,4.556164383561644,Asian American or Asian,>70k,graduate,alissa,conventional,you,0,included,stick,no_ling_ref
+final6,f,4.556164383561644,Asian American or Asian,>70k,graduate,alissa,conventional,you,0,included,ball,no_ling_ref
+final7,m,4.038356164383561,White,>70k,college,alissa,conventional,you,0,included,ball,np_unmod
+final7,m,4.038356164383561,White,>70k,college,alissa,conventional,you,0,included,stick,proform
+final8,f,4.049315068493151,Biracial,60k-69k,graduate,kaelin,conventional,we,0,shy,-,-
+final8,f,4.049315068493151,Biracial,60k-69k,graduate,kaelin,conventional,we,0,shy,-,-
+final9,f,4.054794520547945,White,>70k,graduate,alissa,idiosyncratic,we,0,included,stick,proform
+final9,f,4.054794520547945,White,>70k,graduate,alissa,idiosyncratic,we,0,included,ball,np_unmod
+final10,m,4.487671232876712,White,>70k,some college,kaelin,idiosyncratic,we,1,included,ball,np_unmod
+final10,m,4.487671232876712,White,>70k,some college,kaelin,idiosyncratic,we,1,included,no_ref,0
+final11,m,4.041095890410959,White,>70k,graduate,kaelin,idiosyncratic,we,1,included,ball,np_unmod
+final11,m,4.041095890410959,White,>70k,graduate,kaelin,idiosyncratic,we,1,included,stick,proform
+final12,f,4.241095890410959,White,>70k,graduate,alissa,conventional,you,0,included,ball,np_unmod
+final12,f,4.241095890410959,White,>70k,graduate,alissa,conventional,you,0,included,stick,np_unmod
+final13,f,4.712328767123288,African American or Black,>70k,graduate,alissa,idiosyncratic,you,0,included,ball,np_unmod
+final13,f,4.712328767123288,African American or Black,>70k,graduate,alissa,idiosyncratic,you,0,included,stick,np_unmod
+final14,f,4.13972602739726,Biracial,>70k,college,kaelin,idiosyncratic,you,0,included,ball,np_unmod
+final14,f,4.13972602739726,Biracial,>70k,college,kaelin,idiosyncratic,you,0,included,stick,np_unmod
+final15,f,4.057534246575343,White,>70k,college,kaelin,conventional,you,0,exp_error,-,-
+final15,f,4.057534246575343,White,>70k,college,kaelin,conventional,you,0,exp_error,-,-
+final16,m,4.191780821917808,White,>70k,college,alissa,conventional,we,0,included,ball,np_unmod
+final16,m,4.191780821917808,White,>70k,college,alissa,conventional,we,0,included,stick,proform
+final17,m,4.975342465753425,White,>70k,graduate,kaelin,idiosyncratic,you,0,idiosyncratic,-,-
+final17,m,4.975342465753425,White,>70k,graduate,kaelin,idiosyncratic,you,0,idiosyncratic,-,-
+final18,f,4.7972602739726025,Latine,>70k,graduate,kaelin,conventional,you,1,shy,-,-
+final18,f,4.7972602739726025,Latine,>70k,graduate,kaelin,conventional,you,1,shy,-,-
+final19,m,4.972602739726027,NA,>70k,college,kaelin,conventional,we,1,included,ball,np_unmod
+final19,m,4.972602739726027,NA,>70k,college,kaelin,conventional,we,1,included,stick,np_mod
+final20,m,4.156164383561644,White,NA,some college,kaelin,conventional,you,1,included,stick,no_ling_ref
+final20,m,4.156164383561644,White,NA,some college,kaelin,conventional,you,1,included,ball,np_mod
+final21,m,4.027397260273973,Latine,40k-49k,college,alissa,idiosyncratic,we,0,nonenglish,-,-
+final21,m,4.027397260273973,Latine,40k-49k,college,alissa,idiosyncratic,we,0,nonenglish,-,-
+final22,m,4.117808219178082,White,>70k,graduate,alissa,idiosyncratic,you,0,included,ball,np_unmod
+final22,m,4.117808219178082,White,>70k,graduate,alissa,idiosyncratic,you,0,included,stick,np_unmod
+final23,f,4.676712328767123,White,>70k,graduate,alissa,idiosyncratic,you,0,included,ball,np_unmod
+final23,f,4.676712328767123,White,>70k,graduate,alissa,idiosyncratic,you,0,included,stick,np_unmod
+final24,f,3.6136986301369864,White,NA,no high school,kaelin,conventional,we,1,wrong_age,-,-
+final24,f,3.6136986301369864,White,NA,no high school,kaelin,conventional,we,1,wrong_age,-,-
+final25,m,4.115068493150685,White,>70k,graduate,kaelin,conventional,you,1,included,ball,proform
+final25,m,4.115068493150685,White,>70k,graduate,kaelin,conventional,you,1,included,stick,np_unmod
+final26,m,3.6054794520547944,White,40k-49k,college,kaelin,conventional,we,1,wrong_age,-,-
+final26,m,3.6054794520547944,White,40k-49k,college,kaelin,conventional,we,1,wrong_age,-,-
+final27,f,4.156164383561644,White,>70k,graduate,kaelin,conventional,we,1,included,stick,no_ling_ref
+final27,f,4.156164383561644,White,>70k,graduate,kaelin,conventional,we,1,included,ball,np_unmod
+final28,m,4.887671232876713,African American or Black,>70k,graduate,kaelin,conventional,you,1,included,ball,np_unmod
+final28,m,4.887671232876713,African American or Black,>70k,graduate,kaelin,conventional,you,1,included,stick,np_mod
+final29,f,4.424657534246576,White,>70k,college,kaelin,conventional,we,1,included,ball,proform
+final29,f,4.424657534246576,White,>70k,college,kaelin,conventional,we,1,included,no_ref,0
+final30,m,4.101369863013699,Biracial,>70k,graduate,kaelin,conventional,you,1,included,ball,np_unmod
+final30,m,4.101369863013699,Biracial,>70k,graduate,kaelin,conventional,you,1,included,stick,proform
+final31,m,4.405479452054794,White,>70k,some college,alissa,conventional,you,1,included,ball,np_unmod
+final31,m,4.405479452054794,White,>70k,some college,alissa,conventional,you,1,included,stick,np_unmod
+final32,m,4.5,NA,NA,NA,alissa,conventional,we,1,included,ball,np_unmod
+final32,m,4.5,NA,NA,NA,alissa,conventional,we,1,included,stick,np_unmod
+final33,m,4.090410958904109,White,>70k,high school diploma,alissa,conventional,you,1,included,stick,np_mod
+final33,m,4.090410958904109,White,>70k,high school diploma,alissa,conventional,you,1,included,ball,np_unmod
+final34,m,4.071232876712329,White,>70k,graduate,kaelin,idiosyncratic,we,0,included,ball,proform
+final34,m,4.071232876712329,White,>70k,graduate,kaelin,idiosyncratic,we,0,included,stick,proform
+final35,f,4.821917808219178,White,>70k,graduate,alissa,idiosyncratic,we,0,idiosyncratic,-,-
+final35,f,4.821917808219178,White,>70k,graduate,alissa,idiosyncratic,we,0,idiosyncratic,-,-
+final36,m,4.816438356164384,White,50k-59k,college,alissa,conventional,we,0,included,stick,np_unmod
+final36,m,4.816438356164384,White,50k-59k,college,alissa,conventional,we,0,included,ball,np_mod
+final37,m,4.1726027397260275,White,60k-69k,graduate,alissa,conventional,you,0,exp_error,-,-
+final37,m,4.1726027397260275,White,60k-69k,graduate,alissa,conventional,you,0,exp_error,-,-
+final38,f,4.090410958904109,NA,>70k,graduate,alissa,conventional,you,0,included,stick,proform
+final38,f,4.090410958904109,NA,>70k,graduate,alissa,conventional,you,0,included,ball,proform
+final39,f,4.663013698630137,White,NA,college,alissa,idiosyncratic,you,1,included,stick,np_unmod
+final39,f,4.663013698630137,White,NA,college,alissa,idiosyncratic,you,1,included,ball,np_unmod
+final40,m,4.126027397260274,White,NA,college,alissa,idiosyncratic,you,1,shy,-,-
+final40,m,4.126027397260274,White,NA,college,alissa,idiosyncratic,you,1,shy,-,-
+final41,f,4.076712328767123,NA,NA,NA,alissa,idiosyncratic,you,1,included,stick,no_ling_ref
+final41,f,4.076712328767123,NA,NA,NA,alissa,idiosyncratic,you,1,included,ball,np_unmod
+final42,m,4.16986301369863,Biracial,>70k,graduate,alissa,conventional,we,0,included,stick,no_ling_ref
+final42,m,4.16986301369863,Biracial,>70k,graduate,alissa,conventional,we,0,included,ball,np_unmod
+final43,f,4.008219178082192,White,50k-59k,college,alissa,conventional,we,1,included,ball,np_mod
+final43,f,4.008219178082192,White,50k-59k,college,alissa,conventional,we,1,included,stick,np_mod
+final44,f,3.9452054794520546,Latine,NA,NA,alissa,conventional,you,1,wrong_age,-,-
+final44,f,3.9452054794520546,Latine,NA,NA,alissa,conventional,you,1,wrong_age,-,-
+final45,f,4.583561643835616,White,>70k,graduate,maya&naomi,conventional,we,0,shy,-,-
+final45,f,4.583561643835616,White,>70k,graduate,maya&naomi,conventional,we,0,shy,-,-
+final46,f,4.46027397260274,NA,NA,NA,alissa,idiosyncratic,you,1,shy,-,-
+final46,f,4.46027397260274,NA,NA,NA,alissa,idiosyncratic,you,1,shy,-,-
+final47,f,4.208219178082191,NA,NA,NA,alissa,idiosyncratic,you,1,included,stick,np_unmod
+final47,f,4.208219178082191,NA,NA,NA,alissa,idiosyncratic,you,1,included,ball,np_unmod
+final48,m,4.147945205479452,White,>70k,graduate,alissa,idiosyncratic,we,0,included,ball,no_ling_ref
+final48,m,4.147945205479452,White,>70k,graduate,alissa,idiosyncratic,we,0,included,stick,no_ling_ref
+final49,m,4.9150684931506845,White,NA,graduate,alissa,idiosyncratic,you,1,included,ball,np_unmod
+final49,m,4.9150684931506845,White,NA,graduate,alissa,idiosyncratic,you,1,included,stick,np_mod
+final50,m,4.120547945205479,White,NA,some college,alissa,idiosyncratic,we,1,included,ball,np_unmod
+final50,m,4.120547945205479,White,NA,some college,alissa,idiosyncratic,we,1,included,stick,np_unmod
+final51,m,4.326027397260274,White,>70k,college,maya&naomi,conventional,you,1,included,stick,no_ling_ref
+final51,m,4.326027397260274,White,>70k,college,maya&naomi,conventional,you,1,included,ball,np_unmod
+final52,f,4.30958904109589,White,NA,NA,alissa,conventional,we,1,included,ball,np_unmod
+final52,f,4.30958904109589,White,NA,NA,alissa,conventional,we,1,included,no_ref,0
+final53,f,4.038356164383561,Biracial,>70k,graduate,alissa,conventional,we,2,included,stick,no_ling_ref
+final53,f,4.038356164383561,Biracial,>70k,graduate,alissa,conventional,we,2,included,ball,np_unmod
+final54,m,4.252054794520548,NA,NA,graduate,alissa,conventional,you,2,included,ball,np_unmod
+final54,m,4.252054794520548,NA,NA,graduate,alissa,conventional,you,2,included,stick,np_unmod
+final55,m,4.2684931506849315,Biracial,>70k,graduate,alissa,idiosyncratic,you,0,included,ball,np_unmod
+final55,m,4.2684931506849315,Biracial,>70k,graduate,alissa,idiosyncratic,you,0,included,stick,np_unmod
+final56,f,4.876712328767123,White,NA,graduate,alissa,idiosyncratic,we,1,included,stick,np_unmod
+final56,f,4.876712328767123,White,NA,graduate,alissa,idiosyncratic,we,1,included,ball,np_unmod
+final57,m,4.093150684931507,White,>70k,college,alissa,idiosyncratic,you,1,included,ball,proform
+final57,m,4.093150684931507,White,>70k,college,alissa,idiosyncratic,you,1,included,stick,proform
+final58,m,4.4082191780821915,White,>70k,graduate,alissa,idiosyncratic,we,1,included,ball,np_unmod
+final58,m,4.4082191780821915,White,>70k,graduate,alissa,idiosyncratic,we,1,included,stick,proform
+final59,m,4.4082191780821915,White,>70k,graduate,alissa,idiosyncratic,you,1,included,stick,no_ling_ref
+final59,m,4.4082191780821915,White,>70k,graduate,alissa,idiosyncratic,you,1,included,ball,no_ling_ref
+final60,m,4.652054794520548,White,>70k,graduate,alissa,idiosyncratic,we,1,included,ball,np_mod
+final60,m,4.652054794520548,White,>70k,graduate,alissa,idiosyncratic,we,1,included,stick,np_mod
+final61,m,4.767123287671233,NA,NA,NA,alissa,idiosyncratic,you,1,included,stick,np_unmod
+final61,m,4.767123287671233,NA,NA,NA,alissa,idiosyncratic,you,1,included,ball,proform
+final62,m,4.413698630136986,White,NA,college,alissa,idiosyncratic,we,1,included,ball,np_unmod
+final62,m,4.413698630136986,White,NA,college,alissa,idiosyncratic,we,1,included,stick,np_unmod
+final63,m,4.016438356164383,White,>70k,college,alissa,idiosyncratic,we,1,shy,-,-
+final63,m,4.016438356164383,White,>70k,college,alissa,idiosyncratic,we,1,shy,-,-
+final64,m,4.109589041095891,NA,NA,NA,alissa,idiosyncratic,you,1,idiosyncratic,-,-
+final64,m,4.109589041095891,NA,NA,NA,alissa,idiosyncratic,you,1,idiosyncratic,-,-
+final65,f,4.010958904109589,White,20k-39k,graduate,jadelyn,idiosyncratic,we,0,shy,-,-
+final65,f,4.010958904109589,White,20k-39k,graduate,jadelyn,idiosyncratic,we,0,shy,-,-
+final66,m,4.073972602739726,White,>70k,college,jadelyn,idiosyncratic,we,0,included,ball,proform
+final66,m,4.073972602739726,White,>70k,college,jadelyn,idiosyncratic,we,0,included,stick,np_unmod
+final67,m,4.895890410958904,White,>70k,graduate,jadelyn,idiosyncratic,we,2,included,ball,np_unmod
+final67,m,4.895890410958904,White,>70k,graduate,jadelyn,idiosyncratic,we,2,included,stick,np_mod
+final68,m,4.232876712328767,White,>70k,graduate,jadelyn,idiosyncratic,you,2,included,ball,np_unmod
+final68,m,4.232876712328767,White,>70k,graduate,jadelyn,idiosyncratic,you,2,included,stick,np_unmod
+final69,m,4.602739726027397,White,>70k,graduate,jadelyn,idiosyncratic,we,2,included,stick,np_unmod
+final69,m,4.602739726027397,White,>70k,graduate,jadelyn,idiosyncratic,we,2,included,ball,np_unmod
+final70,f,4.635616438356164,NA,>70k,NA,alissa,idiosyncratic,you,1,included,stick,no_ling_ref
+final70,f,4.635616438356164,NA,>70k,NA,alissa,idiosyncratic,you,1,included,ball,no_ling_ref
+final71,m,4.561643835616438,NA,>70k,some college,alissa,idiosyncratic,we,1,included,stick,proform
+final71,m,4.561643835616438,NA,>70k,some college,alissa,idiosyncratic,we,1,included,ball,np_unmod
+final72,m,4.416438356164384,White,>70k,graduate,alissa,idiosyncratic,you,1,shy,-,-
+final72,m,4.416438356164384,White,>70k,graduate,alissa,idiosyncratic,you,1,shy,-,-
+final73,f,4.449315068493151,Biracial,>70k,graduate,jadelyn,idiosyncratic,you,0,included,ball,np_unmod
+final73,f,4.449315068493151,Biracial,>70k,graduate,jadelyn,idiosyncratic,you,0,included,stick,np_unmod
+final74,f,4.183561643835616,White,>70k,graduate,jadelyn,idiosyncratic,we,0,included,ball,np_unmod
+final74,f,4.183561643835616,White,>70k,graduate,jadelyn,idiosyncratic,we,0,included,stick,np_unmod
+final75,f,4.323287671232877,White,>70k,graduate,alissa,idiosyncratic,we,0,included,stick,proform
+final75,f,4.323287671232877,White,>70k,graduate,alissa,idiosyncratic,we,0,included,ball,np_unmod
+final76,f,4.323287671232877,White,>70k,graduate,alissa,idiosyncratic,we,0,included,ball,np_unmod
+final76,f,4.323287671232877,White,>70k,graduate,alissa,idiosyncratic,we,0,included,stick,np_unmod
+final77,f,4.964383561643835,White,>70k,graduate,alissa,idiosyncratic,we,0,included,ball,no_ling_ref
+final77,f,4.964383561643835,White,>70k,graduate,alissa,idiosyncratic,we,0,included,stick,np_unmod
+final78,m,4.041095890410959,NA,>70k,college,alissa,idiosyncratic,we,2,idiosyncratic,-,-
+final78,m,4.041095890410959,NA,>70k,college,alissa,idiosyncratic,we,2,idiosyncratic,-,-
+final79,m,4.243835616438356,White,>70k,graduate,alissa,idiosyncratic,we,2,shy,-,-
+final79,m,4.243835616438356,White,>70k,graduate,alissa,idiosyncratic,we,2,shy,-,-
+final80,f,4.802739726027397,NA,>70k,graduate,alissa,idiosyncratic,we,2,included,stick,no_ling_ref
+final80,f,4.802739726027397,NA,>70k,graduate,alissa,idiosyncratic,we,2,included,ball,np_unmod
+final81,f,4.435616438356164,Asian American or Asian,>70k,graduate,alissa,idiosyncratic,you,2,included,ball,np_unmod
+final81,f,4.435616438356164,Asian American or Asian,>70k,graduate,alissa,idiosyncratic,you,2,included,stick,np_mod
+final82,f,4.35068493150685,White,>70k,graduate,maya&naomi,idiosyncratic,we,0,included,ball,np_unmod
+final82,f,4.35068493150685,White,>70k,graduate,maya&naomi,idiosyncratic,we,0,included,stick,proform
+final83,f,4.063013698630137,NA,NA,graduate,alissa,idiosyncratic,you,2,included,ball,np_unmod
+final83,f,4.063013698630137,NA,NA,graduate,alissa,idiosyncratic,you,2,included,stick,np_mod
+final84,m,4.317808219178082,Latine,20k-39k,NA,jadelyn,conventional,we,0,included,ball,np_mod
+final84,m,4.317808219178082,Latine,20k-39k,NA,jadelyn,conventional,we,0,included,stick,np_unmod
+final85,f,4.095890410958904,Asian American or Asian,>70k,graduate,maya&naomi,idiosyncratic,you,0,nonenglish,-,-
+final85,f,4.095890410958904,Asian American or Asian,>70k,graduate,maya&naomi,idiosyncratic,you,0,nonenglish,-,-
+final86,f,4.956164383561644,NA,>70k,graduate,alissa,conventional,you,0,included,ball,proform
+final86,f,4.956164383561644,NA,>70k,graduate,alissa,conventional,you,0,included,stick,proform
+final87,m,4.090410958904109,White,>70k,college,jadelyn,conventional,we,0,included,ball,np_unmod
+final87,m,4.090410958904109,White,>70k,college,jadelyn,conventional,we,0,included,no_ref,0
+final88,m,4.013698630136986,White,>70k,graduate,alissa,conventional,we,0,included,ball,np_unmod
+final88,m,4.013698630136986,White,>70k,graduate,alissa,conventional,we,0,included,stick,np_unmod
+final89,m,4.095890410958904,White,>70k,graduate,alissa,conventional,you,0,included,ball,np_mod
+final89,m,4.095890410958904,White,>70k,graduate,alissa,conventional,you,0,included,stick,proform
+final90,f,4.484931506849315,NA,>70k,college,jadelyn,conventional,we,2,idiosyncratic,-,-
+final90,f,4.484931506849315,NA,>70k,college,jadelyn,conventional,we,2,idiosyncratic,-,-
+final91,m,4.66027397260274,Biracial,>70k,graduate,maya&naomi,conventional,you,0,included,ball,np_unmod
+final91,m,4.66027397260274,Biracial,>70k,graduate,maya&naomi,conventional,you,0,included,stick,np_mod
+final92,f,4.391780821917808,NA,>70k,college,jadelyn,conventional,we,2,included,ball,np_unmod
+final92,f,4.391780821917808,NA,>70k,college,jadelyn,conventional,we,2,included,stick,np_unmod
+final93,f,4.942465753424657,Biracial,>70k,graduate,maya&naomi,conventional,we,2,included,stick,np_mod
+final93,f,4.942465753424657,Biracial,>70k,graduate,maya&naomi,conventional,we,2,included,ball,np_mod
+final94,m,4.282191780821917,NA,>70k,graduate,alissa,conventional,we,2,idiosyncratic,-,-
+final94,m,4.282191780821917,NA,>70k,graduate,alissa,conventional,we,2,idiosyncratic,-,-
+final95,f,4.189041095890411,NA,NA,NA,alissa,conventional,we,2,included,ball,np_unmod
+final95,f,4.189041095890411,NA,NA,NA,alissa,conventional,we,2,included,stick,np_mod
+final96,m,4.586301369863014,White,>70k,college,alissa,conventional,you,2,included,ball,np_mod
+final96,m,4.586301369863014,White,>70k,college,alissa,conventional,you,2,included,stick,np_mod
+final97,m,4.032876712328767,White,>70k,graduate,jadelyn,conventional,you,2,included,stick,no_ling_ref
+final97,m,4.032876712328767,White,>70k,graduate,jadelyn,conventional,you,2,included,ball,np_unmod
+final98,f,4.545205479452055,White,>70k,NA,jadelyn,conventional,we,2,included,ball,null
+final98,f,4.545205479452055,White,>70k,NA,jadelyn,conventional,we,2,included,stick,np_mod
+final99,m,4.071232876712329,White,>70k,graduate,alissa,conventional,you,0,included,stick,np_mod
+final99,m,4.071232876712329,White,>70k,graduate,alissa,conventional,you,0,included,ball,np_mod
+final100,f,3.997260273972602,White,>70k,graduate,jadelyn,conventional,we,0,included,ball,np_unmod
+final100,f,3.997260273972602,White,>70k,graduate,jadelyn,conventional,we,0,included,stick,np_mod
+final101,m,4.131506849315069,White,>70k,graduate,alissa,conventional,we,0,included,stick,np_unmod
+final101,m,4.131506849315069,White,>70k,graduate,alissa,conventional,we,0,included,ball,np_unmod
+final102,m,4.2164383561643834,Biracial,40k-49k,graduate,jadelyn,conventional,we,2,included,ball,proform
+final102,m,4.2164383561643834,Biracial,40k-49k,graduate,jadelyn,conventional,we,2,included,stick,np_mod
+final103,f,4.35068493150685,White,>70k,some college,jadelyn,conventional,you,2,included,stick,np_unmod
+final103,f,4.35068493150685,White,>70k,some college,jadelyn,conventional,you,2,included,ball,proform
+final104,m,4.2246575342465755,White,40k-49k,graduate,jadelyn,conventional,we,2,included,ball,np_mod
+final104,m,4.2246575342465755,White,40k-49k,graduate,jadelyn,conventional,we,2,included,stick,np_mod
+final105,f,4.073972602739726,White,>70k,graduate,jadelyn,conventional,you,0,idiosyncratic,-,-
+final105,f,4.073972602739726,White,>70k,graduate,jadelyn,conventional,you,0,idiosyncratic,-,-
+final106,f,4.8054794520547945,White,>70k,graduate,alissa,conventional,you,2,shy,-,-
+final106,f,4.8054794520547945,White,>70k,graduate,alissa,conventional,you,2,shy,-,-
+final107,m,4.076712328767123,Biracial,40k-49k,college,alissa,conventional,you,2,included,ball,np_unmod
+final107,m,4.076712328767123,Biracial,40k-49k,college,alissa,conventional,you,2,included,stick,np_unmod
+final108,m,4.517808219178082,White,>70k,graduate,alissa,conventional,you,2,included,stick,np_mod
+final108,m,4.517808219178082,White,>70k,graduate,alissa,conventional,you,2,included,ball,np_mod
+final109,m,4.098630136986301,Asian American or Asian,>70k,graduate,alissa,conventional,you,2,included,stick,np_unmod
+final109,m,4.098630136986301,Asian American or Asian,>70k,graduate,alissa,conventional,you,2,included,ball,np_unmod
+final110,m,4.589041095890411,Biracial,>70k,graduate,alissa,conventional,you,2,included,stick,np_unmod
+final110,m,4.589041095890411,Biracial,>70k,graduate,alissa,conventional,you,2,included,ball,np_mod
+final111,f,4.032876712328767,White,>70k,graduate,maya&naomi,idiosyncratic,we,0,included,ball,np_unmod
+final111,f,4.032876712328767,White,>70k,graduate,maya&naomi,idiosyncratic,we,0,included,stick,np_mod
+final112,f,4.7972602739726025,NA,>70k,graduate,jadelyn,idiosyncratic,we,2,included,ball,proform
+final112,f,4.7972602739726025,NA,>70k,graduate,jadelyn,idiosyncratic,we,2,included,stick,np_unmod
+final113,f,4.336986301369863,Latine,>70k,graduate,jadelyn,idiosyncratic,we,2,shy,-,-
+final113,f,4.336986301369863,Latine,>70k,graduate,jadelyn,idiosyncratic,we,2,shy,-,-
+final114,f,4.005479452054795,White,>70k,college,alissa,idiosyncratic,you,0,shy,-,-
+final114,f,4.005479452054795,White,>70k,college,alissa,idiosyncratic,you,0,shy,-,-
+final115,f,4.498630136986302,NA,>70k,college,alissa,idiosyncratic,we,2,included,stick,proform
+final115,f,4.498630136986302,NA,>70k,college,alissa,idiosyncratic,we,2,included,ball,proform
+final116,m,4.663013698630137,NA,>70k,graduate,alissa,idiosyncratic,you,2,included,ball,proform
+final116,m,4.663013698630137,NA,>70k,graduate,alissa,idiosyncratic,you,2,included,stick,proform
+final117,m,4.698630136986301,White,>70k,graduate,alissa,idiosyncratic,you,2,included,ball,np_unmod
+final117,m,4.698630136986301,White,>70k,graduate,alissa,idiosyncratic,you,2,included,stick,np_mod
+final118,f,4.435616438356164,NA,>70k,graduate,alissa,idiosyncratic,we,2,included,ball,np_unmod
+final118,f,4.435616438356164,NA,>70k,graduate,alissa,idiosyncratic,we,2,included,stick,np_unmod
+final119,m,4.052054794520548,Asian American or Asian,>70k,graduate,alissa,idiosyncratic,you,2,included,ball,no_ling_ref
+final119,m,4.052054794520548,Asian American or Asian,>70k,graduate,alissa,idiosyncratic,you,2,included,stick,no_ling_ref
+final120,f,4.424657534246576,White,60k-69k,graduate,alissa,idiosyncratic,you,2,included,stick,no_ling_ref
+final120,f,4.424657534246576,White,60k-69k,graduate,alissa,idiosyncratic,you,2,included,ball,no_ling_ref
+final121,m,4.931506849315069,NA,>70k,NA,maya&naomi,idiosyncratic,you,2,exp_error,-,-
+final121,m,4.931506849315069,NA,>70k,NA,maya&naomi,idiosyncratic,you,2,exp_error,-,-
+final122,f,4.024657534246575,White,60k-69k,graduate,jadelyn,idiosyncratic,you,0,included,ball,np_unmod
+final122,f,4.024657534246575,White,60k-69k,graduate,jadelyn,idiosyncratic,you,0,included,stick,proform
+final123,m,4.213698630136986,White,>70k,graduate,alissa,idiosyncratic,you,2,included,ball,proform
+final123,m,4.213698630136986,White,>70k,graduate,alissa,idiosyncratic,you,2,included,stick,np_mod
+final124,m,4.953424657534247,White,>70k,graduate,maya&naomi,idiosyncratic,you,2,included,ball,np_mod
+final124,m,4.953424657534247,White,>70k,graduate,maya&naomi,idiosyncratic,you,2,included,stick,np_mod
