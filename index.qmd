@@ -8,7 +8,7 @@ format: html
 ![](cowboy_hat_edited.png){style="border-radius: 50%; object-fit: cover; object-position: center 30%" width="200"}
 :::
 
-My name is Jared Vasil ([CV](papers/cv_sept26.pdf), [Google Scholar](https://scholar.google.com/citations?user=h2CNbSMAAAAJ&hl=en)). I am a developmental psychologist interested in how people think about themselves ("self-conception"). To study this topic, I investigate the communicative and social behavior of children and chimpanzees.
+My name is Jared Vasil ([CV](papers/cv_sept26.pdf), [Google Scholar](https://scholar.google.com/citations?user=h2CNbSMAAAAJ&hl=en)). I am a psychologist interested in how people think about themselves ("self-conception"). To study this topic, I investigate the communicative and social behavior of children and great apes.
 
 Currently, I am a Postdoctoral Fellow at the [Center for Possible Minds](https://www.possibleminds.org/) and in the [COMPARE Lab](https://www.comparelab.org/) at Indiana University. I earned my PhD from Duke University in 2024 under the supervision of Michael Tomasello.
 
