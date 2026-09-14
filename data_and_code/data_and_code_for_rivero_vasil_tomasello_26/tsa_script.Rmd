@@ -1,0 +1,1725 @@
+---
+title: "Data Analysis for: How Two- and Three-Year-Olds Coordinate Decisions in Dyads and Triads"
+output: html_document
+date: "2026-03-09"
+---
+
+```{r globals, include=FALSE}
+start <- Sys.time()
+
+#### globals ####
+library(brms)      # modeling
+library(flextable) # tables
+library(ggpattern) # visualization aesthetics
+library(janitor)   # data operations
+library(officer)   # tables
+library(parallel)  # parallelization
+library(patchwork) # plots
+library(psych)     # reliability
+library(readxl)    # data import
+library(scales)    # plots
+library(tidybayes) # inference
+library(tidyverse) # data operations
+
+options(contrasts = c("contr.treatment", "contr.poly")) # treatment coding
+
+n_epred_draws <- 2000 # n draws of expected values
+n_length <- 30 # n bins for continuous variables in prediction grid
+```
+
+```{r import-data, include=FALSE}
+
+tsa_data_raw <- read_excel("data/tsa_data.xlsx") # import group data
+tsa_reliability_expanded <- read_excel("data/tsa_reliability_expanded.xlsx") # import expanded reliability data
+tsa_communication0 <- read_excel("data/tsa_comm.xlsx") # import expanded reliability data
+
+```
+
+### DATA CLEANING ###
+```{r data preparation}
+
+tsa_data000 <- tsa_data_raw %>% # create group_mean_age to join later
+  select(group, participant_age) %>% 
+  clean_names() %>%
+  group_by(group) %>% 
+  mutate(group_mean_age = mean(participant_age)) %>% 
+  ungroup() %>% 
+  distinct(group, group_mean_age) %>% 
+  rename(group_id = group)
+
+tsa_data00 <- tsa_data_raw %>% 
+  left_join(tsa_data000, by = "group_id") %>% 
+  group_by(group_id) %>% 
+  mutate(trial = row_number()) %>%
+  ungroup() %>% 
+  mutate(age_factor = as.factor(age),
+         trial = as.factor(trial),
+         outcome = case_when(outcome == 1 ~ "successful",
+                             outcome == 0 ~ "unsuccessful",
+                             T ~ NA),
+         across(c(where(is.character)), ~ as.factor(.)), # all character vars (and age) to factors
+         group_mean_age_standardized = as.numeric(scale(group_mean_age)), # we can simply standardize because every group contributed 4 observations
+         outcome = relevel(outcome, ref = "unsuccessful"), # to model pr(success)
+         #recoding method variable to reflect order presented in manuscript
+         method = factor(case_when(method == 0 ~ 0,
+                                   method == 1 ~ 1, 
+                                   method == 2 ~ 3, 
+                                   method == 3 ~ 4, 
+                                   method == 4 ~ 2,
+                                   T ~ NA)), # replaced as.numeric(method) with NA -- produces identical df's but NA is more readable
+         information_binary = ifelse(method == 4, 1, 0)) %>% 
+  rename(strategy = method)
+
+tsa_demo <- tsa_data00 %>% 
+  select(group, participant, participant_age) %>% 
+  mutate(participant = paste0(group, str_to_lower(as.character(participant))))
+
+tsa_data0 <- tsa_data00 %>% 
+  mutate(
+    collab_yesno = factor(
+      case_when(
+        strategy == "4" ~ "collaborative",
+        strategy != "4" ~ "individualistic",
+        TRUE ~ NA_character_),
+      levels = c("collaborative", "individualistic")), # exclude unsuccessful groups
+    strategy_recoded = case_when(
+      strategy == "4" ~ "1", 
+      strategy != "4" ~ "0",
+      is.na(strategy) ~ "0"),
+    trial_type = ifelse(
+      trial != "4", 
+      "test", 
+      "generalization"), # test or generalization trial
+    color_pattern = case_when(
+      color_pattern == "0" ~ "no_pattern",
+      color_pattern == "1" ~ "first_successful",
+      color_pattern == "2" ~ "alternate",
+      TRUE ~ NA_character_),
+    group_size_num = case_when(
+      group_size == "dyad" ~ 2, 
+      group_size == "triad" ~ 3))
+
+#calculate communication per prompt
+tsa_data <- tsa_data0 %>% 
+  mutate(n_inits_perprompt = communication / (prompt), 
+         n_inits_perprompt_stand = as.numeric(scale(n_inits_perprompt)))
+
+communication_cols <- c(
+  "directive",
+  "suggestive",
+  "correct_partners",
+  "describe_own_choice",
+  "name_point_show_color_or_animal",
+  "request_info",
+  "direct_attention"
+)
+
+tsa_communication <- tsa_communication0 %>%
+  mutate(
+    communication_type = case_when(
+      directive == 1 ~ "directive",
+      suggestive == 1 ~ "suggestive",
+      correct_partners == 1 ~ "correct_partners",
+      describe_own_choice == 1 ~ "describe_own_choice",
+      name_point_show_color_or_animal == 1 ~ "name_point_show_color_or_animal",
+      request_info == 1 ~ "request_info",
+      direct_attention == 1 ~ "direct_attention",
+      TRUE ~ NA_character_
+    )
+  )
+
+# checks for final data frame
+# tsa_data %>% count(group_id)
+# tsa_data %>% count(outcome)
+# tsa_data %>% count(group_id, age_factor)
+# tsa_data %>% count(age_factor, group_size, trial)
+
+```
+
+### DESCRIPTIVES ###
+```{r basic descriptives}
+
+tsa_data %>% # age by condition descriptives
+  group_by(age_factor) %>%
+  summarize(mean = mean(group_mean_age),
+            sd = sd(group_mean_age),
+            min = min(group_mean_age),
+            sd_minus = mean - sd,
+            sd_plus = mean + sd,
+            max = max(group_mean_age),
+            .groups = "drop")
+
+tsa_data %>% # success descriptives
+  group_by(group_size, age_factor) %>%
+  count(outcome) %>% 
+  mutate(proportion = n / sum(n))
+
+tsa_data %>% # engagement descriptives
+  group_by(group_size, age_factor) %>%
+  count(c_engagement) %>% 
+  mutate(proportion = n / sum(n))
+
+tsa_data %>% # location descriptives
+  group_by(age_factor) %>%
+  count(location) %>% 
+  mutate(proportion = n / sum(n))
+
+tsa_data %>% # prompt stats
+  select(group_size, age_factor, prompt) %>%
+  mutate(prompt = replace_na(prompt, 7)) %>%
+  group_by(age_factor, group_size) %>%
+  summarize(mean = mean(prompt),
+            sd = sd(prompt))
+
+# communication descriptives
+
+tsa_communication %>%
+  filter(!is.na(audience)) %>%
+  count(age) %>%
+  group_by(age) %>%
+  mutate(
+    total = sum(n),
+    prop = n / total,
+    percent = prop * 100
+  )
+
+tsa_communication %>%
+  filter(!is.na(communication_type)) %>%
+  count(age, communication_type) %>%
+  group_by(age) %>%
+  mutate(
+    total = sum(n),
+    prop = n / total,
+    percent = prop * 100
+  )
+
+tsa_communication %>%
+  filter(!is.na(communication_type)) %>%
+  count(age, communication_type) %>%
+  ggplot(
+    aes(
+      x = communication_type,
+      y = n,
+      fill = age
+    )
+  ) +
+  geom_col(
+    width = 0.8,
+    position = position_dodge(width = 0.8)
+  ) +
+  geom_text(
+    aes(label = n),
+    position = position_dodge(width = 0.8),
+    hjust = -0.2,
+    size = 3
+  ) +
+  coord_flip() +
+  labs(
+    x = "Communication type",
+    y = "Number of communication acts",
+    fill = "Age"
+  ) +
+  theme_minimal()
+
+tsa_communication %>%
+  filter(!is.na(audience)) %>%
+  count(age, audience) %>%
+  group_by(age) %>%
+  mutate(
+    total = sum(n),
+    prop = n / total,
+    percent = prop * 100
+  )
+
+tsa_communication %>%
+  filter(!is.na(key)) %>%
+  count(age, key) %>%
+  group_by(age) %>%
+  mutate(
+    total = sum(n),
+    prop = n / total,
+    percent = prop * 100
+  )
+
+tsa_communication %>%
+  filter(!is.na(key)) %>%
+  count(age, key, audience) %>%
+  group_by(age, audience) %>%
+  mutate(
+    total = sum(n),
+    prop = n / total,
+    percent = prop * 100
+  )
+
+
+tsa_data %>% # n initiations
+  select(group_size, age_factor, outcome, n_inits_perprompt) %>%
+  group_by(outcome) %>%
+  summarize(mean = mean(n_inits_perprompt),
+            sd = sd(n_inits_perprompt))
+
+tsa_data %>% # n initiations
+  select(group_size, age_factor, outcome, n_inits_perprompt) %>%
+  group_by(group_size) %>%
+  summarize(mean = mean(n_inits_perprompt),
+            sd = sd(n_inits_perprompt))
+
+tsa_data %>% # n initiations
+  select(group_size, age_factor, outcome, n_inits_perprompt) %>%
+  group_by(age_factor) %>%
+  summarize(mean = mean(n_inits_perprompt),
+            sd = sd(n_inits_perprompt))
+
+```
+
+### RELIABILITY ###
+```{r reliability}
+##check this lapply as factor with jared
+tsa_reliability_expanded[] <- lapply(tsa_reliability_expanded, as.factor)
+
+#prompts reliability
+prompts_reliability <- as.matrix(tsa_reliability_expanded[, c("B_prompts", "A_prompts")])
+cohen.kappa(prompts_reliability[, c("B_prompts", "A_prompts")])
+
+mean(as.numeric(tsa_reliability_expanded$B_prompts) == as.numeric(tsa_reliability_expanded$A_prompts),
+     na.rm = TRUE) * 100
+
+#outcome reliability
+outcome_reliability <- as.matrix(tsa_reliability_expanded[, c("B_outcome", "A_outcome")])
+cohen.kappa(outcome_reliability[, c("B_outcome", "A_outcome")])
+
+mean(tsa_reliability_expanded$B_outcome == tsa_reliability_expanded$A_outcome,
+     na.rm = TRUE) * 100
+
+#tactic/method reliability
+tactic_reliability <- as.matrix(tsa_reliability_expanded[, c("B_tactic", "A_tactic")])
+cohen.kappa(tactic_reliability[, c("B_tactic", "A_tactic")])
+
+mean(tsa_reliability_expanded$B_tactic == tsa_reliability_expanded$A_tactic,
+     na.rm = TRUE) * 100
+
+#color reliability
+color_reliability <- as.matrix(tsa_reliability_expanded[, c("A_color", "B_color")])
+cohen.kappa(color_reliability[, c("A_color", "B_color")])
+
+mean(tsa_reliability_expanded$B_color == tsa_reliability_expanded$A_color,
+     na.rm = TRUE) * 100
+
+#engagement reliability
+engagement_reliability <- as.matrix(tsa_reliability_expanded[, c("A_engagement", "B_engagement")])
+cohen.kappa(engagement_reliability[, c("A_engagement", "B_engagement")])
+
+mean(tsa_reliability_expanded$B_engagement == tsa_reliability_expanded$A_engagement,
+     na.rm = TRUE) * 100
+
+#communication reliability
+communication_reliability <- tsa_reliability_expanded %>%
+  mutate(
+    A_communication = as.numeric(A_communication),
+    B_communication = as.numeric(B_communication),
+    proportional_agreement = case_when(
+      is.na(A_communication) | is.na(B_communication) ~ NA_real_,
+      A_communication == 0 & B_communication == 0 ~ 1,
+      TRUE ~ pmin(A_communication, B_communication) /
+        pmax(A_communication, B_communication)))
+
+communication_reliability %>%
+  summarise(
+    n_rows_included = sum(!is.na(proportional_agreement)),
+    n_exact_matches = sum(
+      A_communication == B_communication,
+      na.rm = TRUE),
+    n_disagreements = sum(
+      A_communication != B_communication,
+      na.rm = TRUE),
+    percent_agreement = mean(
+      proportional_agreement,
+      na.rm = TRUE) * 100)
+
+```
+
+# Priors and Sampler
+```{r priors and sampler}
+model_priors <- c(prior(normal(0, 1.00), class = Intercept),
+                  prior(normal(0, 0.70), class = b),
+                  prior(normal(0, 0.40), class = sd),
+                  prior(lkj(2), class = cor))
+
+func_brm <- function(formula,
+                     data, 
+                     priors = NULL, # default priors when none declared
+                     family,
+                     n_chains = 7, # n hmc chains (equals n - 1 cores on JV's machine),
+                     adapt_delta = 0.9,
+                     refresh = 1000) {
+  brm(formula = formula,
+      data = data,
+      family = family,
+      iter = 5000,
+      warmup = 2000,
+      chains = n_chains,
+      cores = detectCores() - 1,
+      control = list(adapt_delta = adapt_delta),
+      prior = priors,
+      refresh = refresh,
+      seed = 27707 # reproducible sampler
+      ) 
+}
+```
+
+# Analyses
+## Engagement
+
+### Data Preparation
+```{r engagement data preparation}
+engagement_df0 <- tsa_data0 %>% # engagement stats (df to be modeled, below)
+  select(group_id, trial, group_size, age_factor, ends_with("_engagement")) %>%
+  pivot_longer(cols = ends_with("_engagement"), names_to = "participant", values_to = "engagement") %>%
+  drop_na(engagement) %>% # drop NAs for third participants in dyads
+  mutate(engagement_factor = as.factor(engagement),
+         participant = str_remove(paste0(group_id, participant), "_engagement"))
+
+engagement_df0 %>%
+  group_by(engagement_factor) %>%
+  count() %>%
+  ungroup() %>%
+  # group_by(group_size) %>%
+  mutate(ratio = 100 * round(n / sum(n), 3)) %>% 
+  ungroup()
+
+engagement_df <- engagement_df0 %>% 
+  filter(engagement_factor != "0")
+```
+
+### Model
+```{r engagement model}
+contrasts(engagement_df$engagement_factor)
+
+mod_engagement <- func_brm(
+  formula = engagement_factor ~ group_size + age_factor + (1 | group_id) + (1 | group_id:participant) + (1 | trial),
+                           data = engagement_df,
+                           prior = model_priors[-4,],
+                           family = "bernoulli")
+```
+
+### Posterior Checks
+```{r engagement posterior checks}
+# pp_check(mod_engagement)
+# plot(mod_engagement) # trace plots
+
+func_bayesian_p_val <- function(mod, responsevar) {
+  family <- mod$family$family                 # Detect family (for bernoulli or poisson -- categorical is computed separately)
+  yrep <- posterior_predict(mod)              # Posterior predictive draws
+  yobs <- as.numeric(mod$data[[responsevar]]) # Observed data
+  if (family == "bernoulli") {                # Adjust for Bernoulli if needed
+    yobs <- yobs - 1                          # assumes 1 = success, 0 = failure
+  }
+  T_obs_mean <- mean(yobs)                    # Compute summary statistics
+  T_rep_mean <- apply(yrep, 1, mean)
+  pvals = mean(T_rep_mean >= T_obs_mean) # Bayesian p-values
+  print(pvals)
+}
+
+func_bayesian_p_val(mod = mod_engagement, responsevar = "engagement_factor")
+```
+
+## Coordination
+### Data Preparation
+```{r coordination data preparation}
+# fig coordination data (coordination data)
+df_fig_coord_data <- tsa_data %>%
+  group_by(age_factor, group_size, group_id, outcome) %>% 
+  count() %>% 
+  mutate(n = ifelse(outcome == "unsuccessful" & n == 4, 0, n), # recode the 3 groups who failed all 4 times as n(successful) = 0
+         outcome = ifelse(outcome == "unsuccessful" & n == 0, "successful", paste(outcome)), # recode "unsuccessful" into "successful" for rows n(successful) = 0
+         age_factor_recoded = case_when(age_factor == "2" ~ "2-Year-Olds", age_factor == "3" ~ "3-Year-Olds"),
+         group_size = str_to_title(group_size)) %>% 
+  filter(outcome == "successful") %>% 
+  ungroup() %>% 
+  left_join(tsa_data %>% distinct(group_id, group_mean_age))
+
+df_fig_coord_data %>% group_by(group_size, age_factor) %>% summarize(mean = mean(n), sd = sd(n))
+  
+ggplot(df_fig_coord_data,
+       aes(x = fct_rev(group_size), y = n)) +
+  geom_jitter(width = 0.25, height = 0.1, size = 3, alpha = 0.6, color = "forestgreen") +
+  stat_summary(fun = mean, geom = "crossbar", color = "black", linewidth = .45) +
+  facet_grid(~ age_factor_recoded) + 
+  theme_classic(base_size = 16, base_family = "Times New Roman") +
+  scale_y_continuous(breaks = 0:4, limits = c(-0.2, 4.2)) +
+  labs(x = "Group Size",
+       y = "Number of Successes") +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+# ggsave("figs/fig_coord_data.png", height = 3, width = 4)
+```
+
+### Models
+```{r coordination models}
+contrasts(tsa_data$outcome) # check that we're modeling pr(success)
+
+mod_success <- func_brm(formula = outcome ~ 
+                          group_size * group_mean_age_standardized + familiarity + location + (1 | group_id) + (1 | trial),
+                        data = tsa_data,
+                        family = "bernoulli",
+                        priors = model_priors[-4,])
+
+mod_success_comm <- func_brm(formula = outcome ~ n_inits_perprompt_stand * group_size + (n_inits_perprompt_stand | group_id) + (1 | trial),
+                             data = tsa_data,
+                             family = "bernoulli",
+                             priors = model_priors)
+```
+
+### Posterior Checks
+```{r coordination posterior checks}
+# conditional_effects(mod_success)
+# conditional_effects(mod_success_comm)
+# plot(conditional_effects(mod_success_comm, effects = "n_inits_perprompt_stand:group_size"), plot = F)[[1]] +
+# theme_classic(base_family = "Times New Roman", base_size = 15)
+# plot(mod_success) # trace plots
+# plot(mod_success_comm) # trace plots
+
+pp_check(mod_success, "dens_overlay", ndraws = 100)
+# pp_check(mod_success, "dens_overlay_grouped", ndraws = 1000, group = "group_size")
+# pp_check(mod_success, "ecdf_overlay_grouped", ndraws = 1000, group = "group_size")
+# pp_check(mod_success, "ecdf_overlay", ndraws = 100)
+
+func_bayesian_p_val(mod = mod_success, responsevar = "outcome")
+func_bayesian_p_val(mod = mod_success_comm, responsevar = "outcome")
+```
+
+### Results
+#### Posterior Draws
+```{r coordination posterior draws}
+# prepare posterior prediction grids
+newdata_mod_success <- crossing(group_size = (levels(mod_success$data$group_size)),
+                                location = levels(mod_success$data$location),
+                                familiarity = levels(mod_success$data$familiarity),
+                                group_mean_age_standardized = seq(from = min(mod_success$data$group_mean_age_standardized), 
+                                                                  to = max(mod_success$data$group_mean_age_standardized), 
+                                                                  length.out = n_length), 
+                                trial = levels(mod_success$data$trial)) %>% 
+  mutate(across(c(group_size, trial, location), ~as.factor(.)))
+
+newdata_mod_success_comm <- crossing(n_inits_perprompt_stand = seq(from = min(mod_success_comm$data$n_inits_perprompt_stand), 
+                                                              to = max(mod_success_comm$data$n_inits_perprompt_stand), 
+                                                              length.out = n_length),
+                                     trial = levels(mod_success_comm$data$trial),
+                                     group_size = levels(mod_success_comm$data$group_size)) %>% 
+  mutate(across(where(is.character), ~as.factor(.)))
+
+# draw posterior samples
+epred_mod_success <- local({
+  set.seed(27707) # reproducible subsampling of posterior draws
+  epred_draws(mod_success, # draws of posterior model-predicted success rate
+              newdata_mod_success,
+              re_formula = ~(1 | trial), # generate predictions per trial level, marginalized across what we've learned about group-level variance (i.e., the other random intercept)
+              ndraws = n_epred_draws)
+}) %>%
+  ungroup() %>% 
+  mutate(
+    group_mean_age_standardized = group_mean_age_standardized,
+    group_mean_age = group_mean_age_standardized * sd(tsa_data$group_mean_age) + mean(tsa_data$group_mean_age),
+    group_size = str_to_title(group_size),
+    age_factor = factor(ifelse(group_mean_age >= 3, "3-Year-Olds", "2-Year-Olds")), # make categorical age var
+    trial_type = factor(ifelse(trial != "4", "test", "generalization")),
+    trial = as.integer(trial)) # checked to ensure that the factor maps correctly to the trial number
+
+epred_mod_success_comm <- local({
+  set.seed(27707) # reproducible subsampling of posterior draws
+  epred_draws(mod_success_comm, # draws of posterior model-predicted success rate
+              newdata_mod_success_comm,
+              re_formula = ~(1 | trial), # generate predictions per trial level, marginalized across what we've learned about group-level variance (i.e., the other random intercept)
+              ndraws = n_epred_draws)
+}) %>%
+  ungroup() %>% 
+  mutate(
+    n_inits_perprompt = n_inits_perprompt_stand * sd(tsa_data$n_inits_perprompt) + mean(tsa_data$n_inits_perprompt),
+  )
+```
+
+#### Continuous Age
+```{r coordination continuous age}
+# marginal age and communication effect
+func_mod_success_continuous <- function(df_draws, continuous_predictor){
+  df <- df_draws %>%
+    group_by(.draw) %>% # compute average effect
+    summarize(slope = cov({{continuous_predictor}}, .epred) / var({{continuous_predictor}}), .groups = "drop")
+  
+  df %>%
+    summarize(prop_gt = mean(slope > 0),
+              hdi_lo = hdi(slope)[ncol(hdi(slope)) - 1], # rightmost HDI LB to safeguard against multimodality
+              mean_slope = mean(slope),
+              hdi_hi = hdi(slope)[ncol(hdi(slope))], # rightmost HDI UB to safeguard against multimodality
+              .groups = "drop")
+}
+
+# do older children succeed more often than younger children, on average?
+epred_mod_success_marginal_age_draws <- func_mod_success_continuous(epred_mod_success, group_mean_age)
+
+# do more frequent talkers succeed more often than less frequent talkers, on average?
+epred_mod_success_comm_marginal_comm_draws <- func_mod_success_continuous(epred_mod_success_comm, n_inits_perprompt)
+
+# age contrasts
+epred_mod_success_draws_slopes <- epred_mod_success %>%
+  group_by(.draw, group_size) %>%
+  summarize(age_slope = cov(group_mean_age, .epred) / var(group_mean_age),
+            .groups = "drop")
+
+epred_mod_success_draws_contrasts <- epred_mod_success_draws_slopes %>%
+  compare_levels(age_slope, by = group_size) %>% 
+  ungroup() %>% 
+  mutate(group_size = "difference_age_slope")
+
+bind_rows(epred_mod_success_draws_slopes, epred_mod_success_draws_contrasts) %>% 
+  group_by(group_size) %>% 
+  summarize(prop_gt = mean(age_slope > 0),
+            hdi_lo = hdi(age_slope)[ncol(hdi(age_slope)) - 1], # rightmost HDI LB to safeguard against multimodality
+            mean_age_slope = mean(age_slope),
+            hdi_hi = hdi(age_slope)[ncol(hdi(age_slope))], # rightmost HDI UB to safeguard against multimodality
+            .groups = "drop")
+
+# bayesian johnson-neyman
+bayes_jn_draws <- epred_mod_success %>% 
+  group_by(.draw, group_size,  group_mean_age, group_mean_age_standardized) %>% 
+  summarize(mean_epred = mean(.epred)) %>% 
+  ungroup() %>% 
+  group_by(group_mean_age, group_mean_age_standardized) %>% 
+  compare_levels(mean_epred, by = "group_size") %>% 
+  ungroup()
+
+bayes_jn_draws_contrasts <- bayes_jn_draws %>% 
+  group_by(group_mean_age, group_mean_age_standardized) %>% 
+  summarize(prop_gt = mean(mean_epred > 0),
+            ci_lo = quantile(mean_epred, .025),
+            mean_mean_epred = mean(mean_epred),
+            ci_hi = quantile(mean_epred, .975),
+            .groups = "drop")
+
+bayes_jn_draws_contrasts %>% print(n = Inf) # 3.20 years based on bins
+
+age_zero <- bayes_jn_draws %>% # 3.17 years interpolated (via HDI, not CI -- CI only used for plotting)
+  group_by(group_mean_age, group_mean_age_standardized) %>% 
+  summarize(prop_gt = mean(mean_epred > 0),
+            ci_lo = hdi(mean_epred)[[1]],
+            mean_mean_epred = mean(mean_epred),
+            ci_hi = hdi(mean_epred)[[2]],
+            .groups = "drop") %>% 
+  arrange(group_mean_age) %>% 
+  with(approx(x = ci_hi,
+              y = group_mean_age,
+              xout = 0)$y)
+
+paste(round(age_zero, 2), "years")
+
+# supplement (sup fig1)
+ggplot(bayes_jn_draws_contrasts,
+       aes(x = group_mean_age,
+           y = mean_mean_epred)) +
+  geom_ribbon(data = ,
+              aes(ymin = ci_lo,
+                  ymax = ci_hi),
+              alpha = 0.2) +
+  geom_line(data = bayes_jn_draws_contrasts, linewidth = 1) +
+  theme_classic(base_size = 18, base_family = "Times New Roman") +
+  labs(x = "Age",
+       y = "Difference in Predicted Success Rates") +
+  geom_vline(xintercept = age_zero, linetype = 2, linewidth = .8, alpha = 1) +
+  geom_hline(yintercept = 0, linetype = 2, linewidth = .5, alpha = .5, color = "grey40") +
+  scale_y_continuous(
+    labels = function(x) sub("^(-?)0\\.", "\\1.", sprintf("%.1f", x)),
+    breaks = pretty_breaks(3)) +
+  theme(axis.title.y = element_text(size = 16))
+# ggsave("figs/sup_fig2.png", width = 5, height = 4)
+```
+
+#### Categorical Age
+```{r coordination categorical age}
+epred_mod_success_categorical_draws <- epred_mod_success %>% 
+  group_by(.draw, group_size, age_factor) %>% 
+  summarize(mean_epred = mean(.epred), .groups = "drop") %>% # compute predicted success per age group and group size
+  pivot_wider(names_from = age_factor, values_from = mean_epred) %>% 
+  mutate(age_slope = `3-Year-Olds` - `2-Year-Olds`) %>%  # compute distribution over age effect within group size
+  pivot_wider(names_from = group_size, values_from = c(`3-Year-Olds`, `2-Year-Olds`, age_slope)) %>% 
+  mutate(difference_age_slope = age_slope_Triad - age_slope_Dyad) # compute distribution over interaction
+
+epred_mod_success_categorical_draws %>% # summarize contrasts
+  select(c(.draw, age_slope_Triad, age_slope_Dyad, difference_age_slope)) %>% 
+  pivot_longer(cols = !.draw, names_to = "variable", values_to = "predicted_difference_age_slope") %>% 
+  group_by(variable) %>%
+  summarize(prop_gt = mean(predicted_difference_age_slope > 0),
+            hdi_lo = hdi(predicted_difference_age_slope)[ncol(hdi(predicted_difference_age_slope)) - 1],
+            mean_predicted_difference = mean(predicted_difference_age_slope),
+            hdi_hi = hdi(predicted_difference_age_slope)[ncol(hdi(predicted_difference_age_slope))],
+            .groups = "drop")
+
+# marginal probabilities
+epred_mod_success_bygroup_draws <- epred_mod_success %>% 
+  group_by(.draw, age_factor, group_size) %>% # draws of predicted success rate in each combination of group_size and age_group, on average across location, trial, and age bins
+  summarize(mean_epred = mean(.epred),
+            .groups = "drop") 
+summary_epred_mod_success_bygroup_draws <- epred_mod_success_bygroup_draws %>%
+  group_by(age_factor, group_size) %>% 
+  summarize(prop_gt = mean(mean_epred > 0.5),
+            prop_gt_char = sprintf("%.0f%%", 100 * prop_gt),
+            hdi_lo = hdi(mean_epred)[ncol(hdi(mean_epred)) - 1], # rightmost HDI LB to safeguard against multimodality
+            mean_mean_epred = mean(mean_epred),
+            hdi_hi = hdi(mean_epred)[ncol(hdi(mean_epred))], # rightmost HDI UB to safeguard against multimodality
+            .groups = "drop")
+
+epred_mod_success_bylocation_draws <- epred_mod_success %>% 
+  group_by(.draw, location) %>%
+  summarize(mean_epred = mean(.epred),
+            .groups = "drop") 
+epred_mod_success_bylocation_draws %>%
+  group_by(location) %>% 
+  summarize(prop_gt = mean(mean_epred > 0.5),
+            prop_gt_char = sprintf("%.0f%%", 100 * prop_gt),
+            hdi_lo = hdi(mean_epred)[ncol(hdi(mean_epred)) - 1], # rightmost HDI LB to safeguard against multimodality
+            mean_mean_epred = mean(mean_epred),
+            hdi_hi = hdi(mean_epred)[ncol(hdi(mean_epred))], # rightmost HDI UB to safeguard against multimodality
+            .groups = "drop")
+epred_mod_success_bylocation_draws_contrast <- epred_mod_success_bylocation_draws %>% 
+  compare_levels(mean_epred, "location")
+epred_mod_success_bylocation_draws_contrast %>% 
+  summarize(prop_gt = mean(mean_epred > 0),
+            prop_gt_char = sprintf("%.0f%%", 100 * prop_gt),
+            hdi_lo = hdi(mean_epred)[ncol(hdi(mean_epred)) - 1], # rightmost HDI LB to safeguard against multimodality
+            mean_mean_epred = mean(mean_epred),
+            hdi_hi = hdi(mean_epred)[ncol(hdi(mean_epred))], # rightmost HDI UB to safeguard against multimodality
+            .groups = "drop")
+
+epred_mod_success_byfamiliarity_draws <- epred_mod_success %>% 
+  group_by(.draw, familiarity) %>% 
+  summarize(mean_epred = mean(.epred),
+            .groups = "drop") 
+epred_mod_success_byfamiliarity_draws %>%
+  group_by(familiarity) %>% 
+  summarize(prop_gt = mean(mean_epred > 0.5),
+            prop_gt_char = sprintf("%.0f%%", 100 * prop_gt),
+            hdi_lo = hdi(mean_epred)[ncol(hdi(mean_epred)) - 1], # rightmost HDI LB to safeguard against multimodality
+            mean_mean_epred = mean(mean_epred),
+            hdi_hi = hdi(mean_epred)[ncol(hdi(mean_epred))], # rightmost HDI UB to safeguard against multimodality
+            .groups = "drop")
+epred_mod_success_byfamiliarity_draws_contrast <- epred_mod_success_byfamiliarity_draws %>% 
+  compare_levels(mean_epred, "familiarity")
+epred_mod_success_byfamiliarity_draws_contrast %>% 
+  summarize(prop_gt = mean(mean_epred > 0),
+            prop_gt_char = sprintf("%.0f%%", 100 * prop_gt),
+            hdi_lo = hdi(mean_epred)[ncol(hdi(mean_epred)) - 1], # rightmost HDI LB to safeguard against multimodality
+            mean_mean_epred = mean(mean_epred),
+            hdi_hi = hdi(mean_epred)[ncol(hdi(mean_epred))], # rightmost HDI UB to safeguard against multimodality
+            .groups = "drop")
+
+# fig (coordination age results)
+# data prep
+df_plot2 <- epred_mod_success %>% 
+  group_by(.draw, group_size, group_mean_age) %>% 
+  summarize(mean_epred = mean(.epred)) %>% 
+  ungroup() %>% 
+  group_by(group_size, group_mean_age) %>% 
+  summarize(prop_gt = mean(mean_epred > 0),
+            ci_lo = quantile(mean_epred, .025)[[1]],
+            mean_mean_epred = mean(mean_epred),
+            ci_hi = quantile(mean_epred, .975)[[1]],
+            .groups = "drop")
+
+# fig2 (continuous age)
+ggplot(df_plot2,
+       aes(x = group_mean_age,
+           y = mean_mean_epred,
+           fill = group_size,
+           color = group_size)) +
+  geom_ribbon(aes(ymin = ci_lo,
+                  ymax = ci_hi),
+              alpha = 0.4, color = NA) +
+  geom_line(linewidth = 1.5) +
+  theme_classic(base_size = 17,
+                base_family = "Times New Roman") +
+  labs(x = "Group Age",
+       y = "Predicted Success Rate",
+       color = "Group Size",
+       fill = "Group Size") +
+  scale_color_manual(values = c("#97af68", "#CBA1B8"),
+                     labels = c("Dyad", "Triad")) +
+  scale_fill_manual(values = c("#97af68", "#CBA1B8"),
+                    labels = c("Dyad", "Triad")) +
+  annotate(
+    "text",
+    x = 2.46, y = c(.74, .3),
+    label = c("Dyad", "Triad"),
+    hjust = 1.1,
+    angle = c(35, 43),
+    family = "Times New Roman",
+    fontface = "bold",
+    size = 5,
+    color = c("#667A42", "#927288")
+  ) +
+  annotate(
+    "text",
+    x = age_zero + .05, y = .25,
+    label = "Dyad = Triad",
+    angle = 90,
+    family = "Times New Roman",
+    fontface = "bold",
+    size = 3.5
+  ) +
+  geom_vline(xintercept = age_zero, linetype = 2, linewidth = .8, alpha = 1) +
+  geom_hline(yintercept = .5, linetype = 2, linewidth = .5, alpha = .5, color = "grey40") +
+  scale_y_continuous(labels = function(x) sub("^0+", "", format(x, trim = TRUE)),  # remove leading zeros
+                     breaks = pretty_breaks(3)) +
+  scale_x_continuous(breaks = pretty_breaks(3)) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        axis.text = element_text(size = 15),
+        legend.position = "none")
+# ggsave("figs/fig2.png", height = 4, width = 5)
+
+# fig coordination categorical age
+fig_coord_cat_age <- ggplot(epred_mod_success_bygroup_draws,
+                  aes(x = fct_rev(group_size), y = mean_epred)) +
+  stat_halfeye(aes(fill = after_stat(y < 0.5)), .width = 0.95, slab_alpha = 0.6, slab_linewidth = 0.5, slab_color = "black") +
+  scale_fill_manual(values = c("TRUE" = "grey80", "FALSE" = "grey30"), guide = "none") +
+  geom_text(data = summary_epred_mod_success_bygroup_draws,
+            aes(x = group_size, y = hdi_hi + .005, label = prop_gt_char),
+            nudge_x = .5,
+            size = 4.5,
+            vjust = -.6,
+            family = "Times New Roman",
+            fontface = "bold",
+            color = "grey30") +
+  geom_hline(yintercept = .5, linetype = 2) +
+  facet_grid( ~ age_factor) +
+  labs(x = "Group Size",
+       y = "Predicted Success Rate") +
+  scale_y_continuous(
+    labels = function(x) sub("^0+", "", format(x, trim = TRUE)),
+    breaks = pretty_breaks(2),
+    limits = c(NA, 1.03)
+  ) +
+  theme_classic(base_size = 17, base_family = "Times New Roman") +
+  theme(axis.text = element_text(size = 15))
+# ggsave("figs/fig_coord_cat_age.png", height = 5, width = 8)
+
+# contrasts
+# across trial type
+epred_mod_success_bygroup_draws_contrasts <- epred_mod_success_bygroup_draws %>% 
+  mutate(group = factor(case_when(age_factor == "2-Year-Olds" & group_size == "Dyad" ~ "2-yo Dyad",
+                                  age_factor == "3-Year-Olds" & group_size == "Dyad" ~ "3-yo Dyad",
+                                  age_factor == "2-Year-Olds" & group_size == "Triad" ~ "2-yo Triad",
+                                  age_factor == "3-Year-Olds" & group_size == "Triad" ~ "3-yo Triad"))) %>%
+  compare_levels(mean_epred, by = "group") %>%
+  ungroup() %>% 
+  rename(diff_mean_epred = mean_epred)
+epred_mod_success_bygroup_draws_contrasts_table <- epred_mod_success_bygroup_draws_contrasts %>%
+  group_by(group) %>% 
+  summarize(prop_gt = mean(diff_mean_epred > 0),
+            hdi_lo = hdi(diff_mean_epred)[ncol(hdi(diff_mean_epred)) - 1],
+            mean_diff_mean_epred = mean(diff_mean_epred),
+            hdi_hi = hdi(diff_mean_epred)[ncol(hdi(diff_mean_epred))],
+            .groups = "drop")
+```
+
+## Communication
+### Predicting Coordination
+```{r coordination communication} 
+# draws for coordination communication analysis
+epred_mod_success_comm_draws <- epred_mod_success_comm %>%
+  group_by(.draw, group_size, n_inits_perprompt) %>% 
+  summarize(comm_slope = mean(.epred),
+            .groups = "drop")
+
+epred_mod_success_comm_draws_summary <- epred_mod_success_comm_draws %>% 
+  group_by(group_size, n_inits_perprompt) %>% 
+  summarize(prop_gt = mean(comm_slope > .5),
+            ci_lo = quantile(comm_slope, .025),
+            hdi_lo = hdi(comm_slope)[1], # rightmost HDI LB to safeguard against multimodality
+            mean_age_slope = mean(comm_slope),
+            ci_hi = quantile(comm_slope, .975),
+            hdi_hi = hdi(comm_slope)[2], # rightmost HDI LB to safeguard against multimodality
+            .groups = "drop")
+
+# fig3 (success predicted by communication)
+ggplot(epred_mod_success_comm_draws_summary,
+       aes(x = n_inits_perprompt,
+           y = mean_age_slope,
+           fill = group_size,
+           color = group_size)) +
+  geom_ribbon(aes(ymin = ci_lo,
+                  ymax = ci_hi),
+              alpha = 0.4, color = NA) +
+  geom_line(linewidth = 1.5) +
+  theme_classic(base_size = 17,
+                base_family = "Times New Roman") +
+  labs(x = "References to Keys",
+       y = "Predicted Success Rate",
+       color = "Group Size",
+       fill = "Group Size") +
+  scale_color_manual(values = c("#97af68", "#CBA1B8"),
+                     labels = c("Dyad", "Triad")) +
+  scale_fill_manual(values = c("#97af68", "#CBA1B8"),
+                    labels = c("Dyad", "Triad")) +
+  annotate(
+    "text",
+    x = c(.41, .32) , y = c(.93, .77),
+    label = c("Dyad", "Triad"),
+    hjust = 1.1,
+    angle = c(12, 50),
+    family = "Times New Roman",
+    fontface = "bold",
+    size = 5,
+    color = c("#667A42", "#927288")
+  ) +
+  # geom_hline(yintercept = .5, linetype = 2) +
+  geom_hline(yintercept = .5, linetype = 2, linewidth = .5, alpha = .5, color = "grey40") +
+  scale_x_continuous(breaks = pretty_breaks(2)) +
+  scale_y_continuous(labels = function(x) sub("^(-?)0\\.", "\\1.", sprintf("%.1f", x)),
+                     breaks = pretty_breaks(2)) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        axis.text = element_text(size = 15),
+        legend.position = "none")
+# ggsave("figs/fig3.png", height = 4, width = 5)
+```
+
+```{r coordination communication-group size}
+epred_mod_success_comm1 <- epred_mod_success_comm %>% 
+  group_by(.draw, group_size) %>% 
+  summarize(age_slope = cov(n_inits_perprompt, .epred) / var(n_inits_perprompt),
+            .groups = "drop") 
+
+epred_mod_success_comm1 %>% 
+  group_by(group_size) %>% 
+    summarize(prop_gt = mean(age_slope > 0),
+            hdi_lo = hdi(age_slope)[1], # rightmost HDI LB to safeguard against multimodality
+            mean_mean_epred = mean(age_slope),
+            hdi_hi = hdi(age_slope)[2], # rightmost HDI LB to safeguard against multimodality
+            .groups = "drop")
+
+# dyads' vs. triads' age slopes (triads > dyads)
+epred_mod_success_comm1 %>% 
+  compare_levels(age_slope, by = "group_size") %>% 
+  rename(diff_age_slope = age_slope) %>% 
+  group_by(group_size) %>% 
+  summarize(prop_gt = mean(diff_age_slope > 0),
+            hdi_lo = hdi(diff_age_slope)[1], # rightmost HDI LB to safeguard against multimodality
+            mean_mean_epred = mean(diff_age_slope),
+            hdi_hi = hdi(diff_age_slope)[2], # rightmost HDI LB to safeguard against multimodality
+            .groups = "drop")
+```
+
+### Predicting Communication
+#### Data Preparation
+```{r communication data preparation}
+df_comm <- tsa_data %>% 
+  group_by(group_id, age_factor, outcome) %>% 
+  summarize(mean = mean(n_inits_perprompt)) %>% 
+  mutate(outcome = str_to_title(outcome),
+         age_factor = paste0(age_factor, "-Year-Olds"))
+
+fig_comm <- df_comm %>% 
+  ggplot(aes(y = fct_rev(outcome), x = mean)) + 
+  facet_grid(age_factor~ .) +
+  geom_jitter(width = .2, 
+              height = 0.2, 
+              alpha = 0.6, 
+              size = 3, 
+              color = "#97af68") +
+  theme_classic(base_family = "Times New Roman", 
+                base_size = 17) +
+  labs(y = NULL, 
+       x = "Average Reference Rate") +
+  stat_summary(fun = mean,
+               geom = "crossbar",
+               color = "black",
+               linewidth = 0.5,
+               width = .75) 
+
+tsa_data %>% group_by(outcome, age_factor) %>% # check
+  summarize(n = n(),
+            mean = mean(communication),
+            sd = sd(communication),
+            .groups = "drop")
+
+tsa_data %>% # lots of low values in outcome == successful
+  ggplot(aes(x = communication)) +
+  geom_histogram() +
+  facet_grid(. ~ outcome)
+
+tsa_data %>% # mean ~= variance
+  summarize(mean = mean(communication),
+            variance = var(communication)) %>% 
+  mutate(ratio = variance / mean) # ideally, equals 1 -- values greater than 1 signals overdispersion
+
+# communication by location
+tsa_data %>% 
+  group_by(location) %>% 
+  summarize(mean = mean(communication),
+            sd = sd(communication))
+
+# communication by familiarity
+tsa_data %>% 
+  group_by(familiarity) %>% 
+  summarize(mean = mean(communication),
+            sd = sd(communication))
+```
+
+#### Model
+```{r communication model}
+# we use poisson because zero-inflated negative binomial model (brms "zero_inflated_negbinomial()") indicated neither zero inflation nor overdispersion
+
+mod_comm <- func_brm(formula = communication ~ (group_mean_age_standardized + outcome + group_size)^2 + familiarity + location + offset(log(prompt)) + (outcome | group_id) + (1 | trial),
+                     data = tsa_data,
+                     family = poisson(),
+                     prior = c(prior(normal(log(.5), 2), class = Intercept),
+                               prior(normal(0, 0.25), class = b),            
+                               prior(normal(0, .15), class = sd),         
+                               prior(lkj(2), class = cor)))
+```
+
+#### Posterior Checks
+```{r communication posterior checks}
+# plot(mod_comm)
+# pp_check(mod_comm, ndraws = 100)
+# pp_check(mod_comm, "ecdf_overlay", ndraws = 1000)
+# conditional_effects(mod_comm, effects = "age_factor:outcome")
+
+func_bayesian_p_val(mod = mod_comm, responsevar = "communication") # poisson p val checks out
+```
+
+#### Results
+##### Posterior Draws
+```{r communication posterior draws}
+newdata_mod_comm <- crossing(group_size = (levels(mod_comm$data$group_size)),
+                             location = levels(mod_comm$data$location),
+                             familiarity = levels(mod_comm$data$familiarity),
+                             group_mean_age_standardized = seq(from = min(mod_comm$data$group_mean_age_standardized), 
+                                                               to = max(mod_comm$data$group_mean_age_standardized), 
+                                                               length.out = n_length),  
+                             outcome = levels(mod_comm$data$outcome),
+                             prompt = seq(from = min(mod_comm$data$prompt), 
+                                          to = max(mod_comm$data$prompt))) %>% 
+  mutate(across(c(group_size, location), ~as.factor(.)))
+
+# draw posterior samples
+epred_mod_comm <- local({
+  set.seed(27707) # reproducible subsampling of posterior draws
+  epred_draws(mod_comm, # draws of posterior model-predicted success rate
+              newdata_mod_comm,
+              re_formula = NA, # generate predictions per trial level, marginalized across what we've learned about group-level variance (i.e., the other random intercept)
+              ndraws = n_epred_draws)
+}) %>%
+  ungroup() %>%
+  mutate(across(c(group_size, outcome, location), ~str_to_title(.)),
+         group_mean_age = group_mean_age_standardized * sd(tsa_data$group_mean_age) + mean(tsa_data$group_mean_age),
+         age_factor = factor(ifelse(group_mean_age >= 3, "3-Year-Olds", "2-Year-Olds")),
+         rate = .epred / prompt) # get poisson rate
+```
+
+##### Categorical Age
+```{r communication categorical age}
+epred_mod_comm_age_draws <- epred_mod_comm %>% 
+  group_by(.draw, age_factor) %>% 
+  summarize(mean_rate = mean(rate),
+            .groups = "drop")
+
+epred_mod_comm_age_draws %>% 
+  group_by(age_factor) %>% 
+  summarize(hdi_lo = hdi(mean_rate)[ncol(hdi(mean_rate)) - 1], # rightmost HDI LB to safeguard against multimodality
+            mean_mean_rate = mean(mean_rate),
+            hdi_hi = hdi(mean_rate)[ncol(hdi(mean_rate))], # rightmost HDI UB to safeguard against multimodality
+            prop_gt = mean(mean_rate > 0),
+            prop_gt_char = sprintf("%.0f%%", 100 * prop_gt),
+            .groups = "drop")
+
+epred_mod_comm_age_draws_constrasts <- epred_mod_comm_age_draws %>% 
+  group_by(age_factor) %>% 
+  compare_levels(mean_rate, by = "age_factor") %>% 
+  ungroup() %>% 
+  rename(diff_mean_rate = mean_rate)
+
+# 3-year-olds talk more than 2-year-olds
+epred_mod_comm_age_draws_constrasts %>% 
+  group_by(age_factor) %>% 
+  summarize(hdi_lo = hdi(diff_mean_rate)[ncol(hdi(diff_mean_rate)) - 1], # rightmost HDI LB to safeguard against multimodality
+            mean_diff_mean_rate = mean(diff_mean_rate),
+            hdi_hi = hdi(diff_mean_rate)[ncol(hdi(diff_mean_rate))], # rightmost HDI UB to safeguard against multimodality
+            prop_gt = mean(diff_mean_rate > 0),
+            prop_gt_char = sprintf("%.0f%%", 100 * prop_gt),
+            .groups = "drop")
+```
+
+##### Location
+```{r communication location}
+epred_mod_comm_loc_draws <- epred_mod_comm %>% 
+  group_by(.draw, location) %>% 
+  summarize(mean_rate = mean(rate),
+            .groups = "drop")
+
+epred_mod_comm_loc_draws %>% 
+  group_by(location) %>% 
+  summarize(hdi_lo = hdi(mean_rate)[ncol(hdi(mean_rate)) - 1], # rightmost HDI LB to safeguard against multimodality
+            mean_mean_rate = mean(mean_rate),
+            hdi_hi = hdi(mean_rate)[ncol(hdi(mean_rate))], # rightmost HDI UB to safeguard against multimodality
+            prop_gt = mean(mean_rate > 0),
+            prop_gt_char = sprintf("%.0f%%", 100 * prop_gt),
+            .groups = "drop")
+
+epred_mod_comm_loc_draws_contrasts <- epred_mod_comm_loc_draws %>% 
+  group_by(location) %>% 
+  compare_levels(mean_rate, by = "location") %>% 
+  ungroup() %>% 
+  rename(diff_mean_rate = mean_rate)
+
+epred_mod_comm_loc_draws_contrasts %>% 
+  group_by(location) %>% 
+  summarize(hdi_lo = hdi(diff_mean_rate)[ncol(hdi(diff_mean_rate)) - 1], # rightmost HDI LB to safeguard against multimodality
+            mean_diff_mean_rate = mean(diff_mean_rate),
+            hdi_hi = hdi(diff_mean_rate)[ncol(hdi(diff_mean_rate))], # rightmost HDI UB to safeguard against multimodality
+            prop_gt = mean(diff_mean_rate > 0),
+            prop_gt_char = sprintf("%.0f%%", 100 * prop_gt),
+            .groups = "drop")
+```
+
+##### Familiarity
+```{r communication location}
+epred_mod_comm_fam_draws <- epred_mod_comm %>% 
+  group_by(.draw, familiarity) %>% 
+  summarize(mean_rate = mean(rate),
+            .groups = "drop")
+
+epred_mod_comm_fam_draws %>% 
+  group_by(familiarity) %>% 
+  summarize(hdi_lo = hdi(mean_rate)[ncol(hdi(mean_rate)) - 1], # rightmost HDI LB to safeguard against multimodality
+            mean_mean_rate = mean(mean_rate),
+            hdi_hi = hdi(mean_rate)[ncol(hdi(mean_rate))], # rightmost HDI UB to safeguard against multimodality
+            prop_gt = mean(mean_rate > 0),
+            prop_gt_char = sprintf("%.0f%%", 100 * prop_gt),
+            .groups = "drop")
+
+epred_mod_comm_fam_draws_contrasts <- epred_mod_comm_fam_draws %>% 
+  mutate(familiarity = fct_relevel(familiarity, "unfamiliar", "familiar")) %>% 
+  group_by(familiarity) %>% 
+  compare_levels(mean_rate, by = "familiarity") %>% 
+  ungroup() %>% 
+  rename(diff_mean_rate = mean_rate)
+
+epred_mod_comm_fam_draws_contrasts %>% 
+  group_by(familiarity) %>% 
+  summarize(hdi_lo = hdi(diff_mean_rate)[ncol(hdi(diff_mean_rate)) - 1], # rightmost HDI LB to safeguard against multimodality
+            mean_diff_mean_rate = mean(diff_mean_rate),
+            hdi_hi = hdi(diff_mean_rate)[ncol(hdi(diff_mean_rate))], # rightmost HDI UB to safeguard against multimodality
+            prop_gt = mean(diff_mean_rate > 0),
+            prop_gt_char = sprintf("%.0f%%", 100 * prop_gt),
+            .groups = "drop")
+```
+
+##### Outcome
+```{r communication outcome}
+# organize draws
+epred_mod_comm_draws_conditional <- epred_mod_comm %>% # posterior rate of key references per prompt
+  group_by(.draw, outcome, age_factor) %>% 
+  summarize(mean_rate = mean(rate), .groups = "drop")
+
+epred_mod_comm_draws_overall <- epred_mod_comm %>% # posterior rate of key references per prompt
+  group_by(.draw, outcome) %>% 
+  summarize(mean_rate = mean(rate), .groups = "drop")
+
+epred_mod_comm_draws <- rbind(epred_mod_comm_draws_conditional,
+                              epred_mod_comm_draws_overall %>% mutate(age_factor = "Overall"))
+
+# summaries
+epred_mod_comm_draws_conditional_summary <- epred_mod_comm_draws_conditional %>% # conditional on age
+  group_by(outcome, age_factor) %>%
+  summarize(hdi_lo = hdi(mean_rate)[ncol(hdi(mean_rate)) - 1], # rightmost HDI LB to safeguard against multimodality
+            mean_mean_rate = mean(mean_rate),
+            hdi_hi = hdi(mean_rate)[ncol(hdi(mean_rate))], # rightmost HDI UB to safeguard against multimodality
+            .groups = "drop")
+epred_mod_comm_draws_overall_summary <- epred_mod_comm_draws_overall %>% # marginal across age
+  group_by(outcome) %>%
+  summarize(hdi_lo = hdi(mean_rate)[ncol(hdi(mean_rate)) - 1], # rightmost HDI LB to safeguard against multimodality
+            mean_mean_rate = mean(mean_rate),
+            hdi_hi = hdi(mean_rate)[ncol(hdi(mean_rate))], # rightmost HDI UB to safeguard against multimodality
+            .groups = "drop")
+epred_mod_comm_draws_summary <- rbind(epred_mod_comm_draws_conditional_summary,
+                                      epred_mod_comm_draws_overall_summary %>% mutate(age_factor = "Overall"))
+
+# contrasts
+epred_mod_comm_draws_conditional_contrasts <- epred_mod_comm_draws_conditional %>% # successful 2-year-old groups referred to the keys more often than unsuccessful groups; 3-yo groups showed no association
+  group_by(age_factor) %>% 
+  compare_levels(mean_rate, by = "outcome") %>% 
+  ungroup() 
+epred_mod_comm_draws_conditional_contrasts_summary <- epred_mod_comm_draws_conditional_contrasts %>% 
+  group_by(age_factor) %>% 
+  summarize(hdi_lo = hdi(mean_rate)[ncol(hdi(mean_rate)) - 1], # rightmost HDI LB to safeguard against multimodality
+            mean_mean_rate = mean(mean_rate),
+            hdi_hi = hdi(mean_rate)[ncol(hdi(mean_rate))], # rightmost HDI UB to safeguard against multimodality
+            prop_gt = mean(mean_rate > 0),
+            prop_gt_char = sprintf("%.0f%%", 100 * prop_gt),
+            .groups = "drop")
+
+epred_mod_comm_draws_overall_contrasts <- epred_mod_comm_draws_overall %>% 
+  mutate(outcome = fct_relevel(outcome, "Unsuccessful", "Successful")) %>% 
+  compare_levels(mean_rate, by = "outcome") %>% 
+  ungroup()
+epred_mod_comm_draws_overall_contrasts_summary <- epred_mod_comm_draws_overall_contrasts %>% 
+  group_by(outcome) %>% 
+  summarize(hdi_lo = hdi(mean_rate)[ncol(hdi(mean_rate)) - 1], # rightmost HDI LB to safeguard against multimodality
+          mean_mean_rate = mean(mean_rate),
+          hdi_hi = hdi(mean_rate)[ncol(hdi(mean_rate))], # rightmost HDI UB to safeguard against multimodality
+          prop_gt = mean(mean_rate > 0),
+          prop_gt_char = sprintf("%.0f%%", 100 * prop_gt),
+          .groups = "drop")
+
+epred_mod_comm_draws_contrasts <- rbind(epred_mod_comm_draws_conditional_contrasts,
+                                        epred_mod_comm_draws_overall_contrasts %>% mutate(age_factor = "Overall"))
+epred_mod_comm_draws_contrasts_summary <- rbind(epred_mod_comm_draws_conditional_contrasts_summary,
+                                                epred_mod_comm_draws_overall_contrasts_summary %>% 
+                                                  select(-outcome) %>% 
+                                                  mutate(age_factor = "Overall"))
+
+# fig_mod_comm (communication model results)
+fig_mod_comm <- ggplot(epred_mod_comm_draws_conditional_contrasts,
+                aes(y = age_factor, x = mean_rate)) +
+  stat_halfeye(aes(fill = after_stat(x < 0)),
+               .width = 0.95, slab_alpha = 0.6, slab_linewidth = 0.5, slab_color = "black") +
+  scale_fill_manual(values = c("TRUE" = "grey80", "FALSE" = "grey30"), guide = "none") +
+  geom_text(data = epred_mod_comm_draws_conditional_contrasts_summary,
+            aes(y = age_factor, x = .15, label = prop_gt_char),
+            nudge_y = 0.3,
+            size  = 4.75,
+            family = "Times New Roman",
+            fontface = "bold",
+            color = "grey30") +
+  geom_text(data = data.frame(
+    age_factor = "2-Year-Olds",
+    x = -.23,
+    y = 2.05,
+    label = "Successful"),
+    aes(x = x, y = y, label = label),
+    inherit.aes = FALSE,
+    size = 4.75,
+    fontface = "bold",
+    family = "Times New Roman",
+    color = "grey80")+
+  geom_text(data = data.frame(
+    age_factor = "2-Year-Olds",
+    x = 0.28,
+    y = 2.05,
+    label = "Unsuccessful"),
+    aes(x = x, y = y, label = label),
+    inherit.aes = FALSE,
+    size = 4.75,
+    fontface = "bold",
+    family = "Times New Roman",
+    color = "grey30") +
+  facet_grid(age_factor ~ ., scales = "free") +
+  labs(x = "Difference in Predicted\nReference Rates",
+       y = NULL) +
+  geom_vline(xintercept = 0, linetype = 2) +
+  scale_x_continuous(breaks = pretty_breaks(3),
+                     labels = function(x) round(abs(x), 2),
+                     expand = expansion(mult = c(0.1, .25))) +
+  scale_y_discrete(expand = expansion(mult = c(0.1, 1.15))) +
+  theme_classic(base_size = 17, base_family = "Times New Roman") +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank())
+
+# ggsave("figs/fig_mod_comm.png", height = 4, width = 8)
+```
+
+```{r communication condition}
+epred_mod_comm_size_draws <- epred_mod_comm %>% 
+  group_by(.draw, group_size) %>% 
+  summarize(mean_rate = mean(rate),
+            .groups = "drop")
+
+epred_mod_comm_size_draws %>% 
+  group_by(group_size) %>% 
+  summarize(hdi_lo = hdi(mean_rate)[ncol(hdi(mean_rate)) - 1], # rightmost HDI LB to safeguard against multimodality
+            mean_mean_rate = mean(mean_rate),
+            hdi_hi = hdi(mean_rate)[ncol(hdi(mean_rate))], # rightmost HDI UB to safeguard against multimodality
+            prop_gt = mean(mean_rate > 0),
+            prop_gt_char = sprintf("%.0f%%", 100 * prop_gt),
+            .groups = "drop")
+
+epred_mod_comm_size_draws_contrasts <- epred_mod_comm_size_draws %>% 
+  group_by(group_size) %>% 
+  compare_levels(mean_rate, by = "group_size") %>% 
+  ungroup() %>% 
+  rename(diff_mean_rate = mean_rate)
+
+epred_mod_comm_size_draws_contrasts %>% 
+  group_by(group_size) %>% 
+  summarize(hdi_lo = hdi(diff_mean_rate)[ncol(hdi(diff_mean_rate)) - 1], # rightmost HDI LB to safeguard against multimodality
+            mean_diff_mean_rate = mean(diff_mean_rate),
+            hdi_hi = hdi(diff_mean_rate)[ncol(hdi(diff_mean_rate))], # rightmost HDI UB to safeguard against multimodality
+            prop_gt = mean(diff_mean_rate > 0),
+            prop_gt_char = sprintf("%.0f%%", 100 * prop_gt),
+            .groups = "drop")
+```
+
+## Strategies
+### Data Preparation
+```{r strategies data preparation}
+# coordination strategies among successful groups
+# probability of information as the means to success among successful groups
+tsa_data$collab_yesno <- relevel(tsa_data$collab_yesno, ref = "individualistic")
+contrasts(tsa_data$collab_yesno) # model the probability of collaboration instead of individualistic as the means of coordination among successful groups
+
+tsa_data_model5a <- tsa_data %>% # exclude unsuccessful outcomes
+  filter(outcome == "successful")
+
+tsa_data_model5 <- tsa_data_model5a %>% 
+  select(-group_mean_age_standardized) %>% 
+  left_join(tsa_data_model5a %>% 
+              distinct(group_id, group_mean_age) %>% 
+              mutate(group_mean_age_standardized = as.numeric(scale(group_mean_age))))
+
+tsa_data_model5 %>% # strategy proportions among successful groups
+  drop_na(strategy) %>% 
+  count(strategy) %>% 
+  # group_by(age_factor, group_size) %>% 
+  mutate(ratio = n / sum(n))
+
+tsa_data_model5 %>% # count of groups who succeeded at least once
+  distinct(group_id) %>% 
+  count
+
+# fig_strategies data
+fig_strat_dat <- tsa_data_model5 %>% 
+  filter(collab_yesno == "collaborative") %>% # only display collaboration data, because this is a yes-no mutually exclusive variable
+  group_by(collab_yesno, strategy, group_size, age_factor, group_id) %>%
+  count %>% 
+  ungroup() %>% # don't need to do any recoding here because no groups used a non-informative strategy on all four trials
+  mutate(across(c(collab_yesno, group_size), ~str_to_title(.)),
+         age_factor_recoded = case_when(age_factor == "2" ~ "2-Year-Olds", 
+                                                   age_factor == "3" ~ "3-Year-Olds")) %>% 
+  ggplot(aes(x = fct_rev(group_size), y = n)) +
+  geom_jitter(width = 0.25, height = 0.1, size = 3, alpha = 0.6, color = "forestgreen") +
+  stat_summary(fun = mean, 
+               geom = "crossbar", 
+               color = "black", 
+               alpha = 0.6) +
+  facet_grid( ~ age_factor_recoded) + 
+  theme_classic(base_size = 17, base_family = "Times New Roman") +
+  scale_y_continuous(breaks = 1:4, limits = c(0.75, 4.2)) +
+  labs(x = "Group Size",
+       y = "Collaboration Count") +
+  theme(axis.text = element_text(size = 15))
+```
+
+### Model
+```{r strategies model}
+mod_strategy <- func_brm(formula =  collab_yesno ~ group_size * group_mean_age_standardized + location + (1 | group_id) + (1 | trial),
+                         data = tsa_data_model5,
+                         priors = model_priors[-4,],
+                         family = "bernoulli")
+```
+
+### Posterior Checks
+```{r strategies posterior checks}
+# conditional_effects(mod_strategy, effects = "group_mean_age_standardized:group_size")
+# plot(mod_strategy) # trace plots
+# pp_check(mod_strategy, type = "bars_grouped", group = "group_size", ndraws = 100)
+func_bayesian_p_val(mod = mod_strategy, responsevar = "collab_yesno")
+```
+
+### Results
+#### Posterior Draws
+```{r strategies posterior draws}
+newdata_mod_strategy <- crossing(group_size = levels(mod_strategy$data$group_size) %>% fct_unique() %>% fct_drop(),
+                               location     = levels(mod_strategy$data$location) %>% fct_unique() %>% fct_drop(),
+                               group_mean_age_standardized  = seq(from = min(mod_strategy$data$group_mean_age_standardized),
+                                                                  to = max(mod_strategy$data$group_mean_age_standardized),
+                                                                  length.out = n_length))
+
+epred_mod_strategy <- local({
+  set.seed(27707) # reproducible subsampling of posterior draws
+  epred_draws(mod_strategy, # draws of posterior model-predicted success rate
+                                newdata_mod_strategy,
+                                re_formula = NA, 
+                                ndraws = n_epred_draws)
+  }) %>% 
+  ungroup %>% 
+  mutate(group_mean_age = group_mean_age_standardized * sd(tsa_data_model5$group_mean_age) + mean(tsa_data_model5$group_mean_age),
+         age_factor = factor(ifelse(group_mean_age >= 3, "3-Year-Olds", "2-Year-Olds")), # make categorical age var
+         group_size = factor(str_to_title(as.character(group_size))),
+         group = factor(case_when(age_factor == "2-Year-Olds" & group_size == "Dyad" ~ "2-yo Dyad",
+                                  age_factor == "3-Year-Olds" & group_size == "Dyad" ~ "3-yo Dyad",
+                                  age_factor == "2-Year-Olds" & group_size == "Triad" ~ "2-yo Triad",
+                                  age_factor == "3-Year-Olds" & group_size == "Triad" ~ "3-yo Triad"),
+                        levels = c("3-yo Dyad", "3-yo Triad", "2-yo Dyad", "2-yo Triad")))
+```
+
+#### Categorical Age
+```{r strategies categorical age}
+# Custom analytical function
+func_epred_processing <- function(df, var1, var2 = NULL){ 
+  
+  var1 <- rlang::enquo(var1)
+  var2 <- rlang::enquo(var2)
+  
+  draws <- df %>% 
+    group_by(.draw, {{var1}}, {{var2}}) %>% 
+    summarize(mean_epred = mean(.epred), .groups = "drop")
+  
+  draws_summary <- draws %>% 
+    group_by({{var1}}, {{var2}}) %>% 
+    summarize(hdi_lo = hdi(mean_epred)[ncol(hdi(mean_epred)) - 1], # rightmost HDI LB to safeguard against multimodality
+              mean_mean_epred = mean(mean_epred),
+              hdi_hi = hdi(mean_epred)[ncol(hdi(mean_epred))], # rightmost HDI UB to safeguard against multimodality
+              prop_gt = mean(mean_epred > 0.5),
+              prop_gt_char = sprintf("%.0f%%", 100 * prop_gt),
+              .groups = "drop")
+  
+  contrasts_draws <- draws %>%
+    group_by({{var2}}) %>%
+    compare_levels(mean_epred, by = {{var1}}) %>%
+    ungroup() %>%
+    rename(diff_mean_epred = mean_epred)
+  
+  contrasts_draws_summary <- contrasts_draws %>%
+    group_by({{var1}}, {{var2}}) %>%
+    summarize(hdi_lo = hdi(diff_mean_epred)[ncol(hdi(diff_mean_epred)) - 1], # rightmost HDI LB to safeguard against multimodality
+              mean_diff_mean_epred = mean(diff_mean_epred),
+              hdi_hi = hdi(diff_mean_epred)[ncol(hdi(diff_mean_epred))], # rightmost HDI UB to safeguard against multimodality
+              prop_gt = mean(diff_mean_epred > 0),
+              .groups = "drop")
+  
+  if (!rlang::quo_is_null(var2)) { 
+    contrasts_draws_intxn <- contrasts_draws %>%
+      compare_levels(diff_mean_epred, by = {{var2}}) %>%
+      ungroup() %>%
+      rename(diff_diff_mean_epred = diff_mean_epred)
+    
+    contrasts_draws_intxn_summary <- contrasts_draws_intxn %>%
+      summarize(hdi_lo = hdi(diff_diff_mean_epred)[ncol(hdi(diff_diff_mean_epred)) - 1],
+                mean_diff_diff_mean_epred = mean(diff_diff_mean_epred),
+                hdi_hi = hdi(diff_diff_mean_epred)[ncol(hdi(diff_diff_mean_epred))],
+                prop_gt = mean(diff_diff_mean_epred > 0),
+                .groups = "drop")
+    
+    return(list(draws = draws, draws_summary = draws_summary, contrasts_draws = contrasts_draws, contrasts_draws_summary = contrasts_draws_summary, contrasts_draws_intxn = contrasts_draws_intxn, contrasts_draws_intxn_summary = contrasts_draws_intxn_summary))
+  } 
+  else {return(list(draws = draws, draws_summary = draws_summary, contrasts_draws = contrasts_draws, contrasts_draws_summary = contrasts_draws_summary))
+  }
+}
+
+# Results
+epred_processing_group_mod_strategy <- func_epred_processing(epred_mod_strategy, group) # means and contrasts for all cells
+epred_processing_group_size_mod_strategy <- func_epred_processing(epred_mod_strategy, group_size) # means and contrasts for group size
+epred_processing_age_factor_mod_strategy <- func_epred_processing(epred_mod_strategy, age_factor) # means and contrasts for age
+epred_processing_interaction1_mod_strategy <- func_epred_processing(epred_mod_strategy, group_size, age_factor) # means and contrasts for group size:age (interaction estimate is equivalent for interaction1 and interaction2 -- think, equality of mixed partials!)
+epred_processing_interaction2_mod_strategy <- func_epred_processing(epred_mod_strategy, age_factor, group_size) # means and contrasts for age:group size (interaction estimate is equivalent for interaction1 and interaction2 -- think, equality of mixed partials!)
+
+# fig4 (strategies results)
+df_fig4 <- list(draws = epred_processing_group_mod_strategy$draws, # data preparation
+                 draws_summary = epred_processing_group_mod_strategy$draws_summary) %>% 
+  map(~ .x %>% 
+        separate(group, into = c("age_factor", "group_size"), sep = " ") %>% 
+        mutate(age_factor = case_when(age_factor == "2-yo" ~ "2-Year-Olds",
+                                                 age_factor == "3-yo" ~ "3-Year-Olds",
+                                                 TRUE ~ NA_character_)))
+        
+ggplot(df_fig4$draws,
+                  aes(x = fct_rev(group_size), y = mean_epred)) +
+  stat_halfeye(aes(fill = after_stat(y < 0.5)), .width = 0.95, slab_alpha = 0.6, slab_linewidth = 0.5, slab_color = "black") +
+  scale_fill_manual(values = c("TRUE" = "grey80", "FALSE" = "grey30"), guide = "none") +
+  geom_text(data = df_fig4$draws_summary,
+            aes(x = group_size, y = hdi_hi + .005, label = prop_gt_char),
+            nudge_x = .5,
+            size = 4.5,
+            vjust = -.6,
+            family = "Times New Roman",
+            fontface = "bold",
+            color = "grey30") +
+  geom_hline(yintercept = .5, linetype = 2) +
+  facet_grid( ~ age_factor) +
+  labs(x = "Group Size",
+       y = "Predicted Collaboration Rate") +
+  scale_y_continuous(
+    labels = function(x) sub("^0+", "", format(x, trim = TRUE)),
+    breaks = pretty_breaks(2),
+    limits = c(NA, 1.03)
+  ) +
+  theme_classic(base_size = 17, base_family = "Times New Roman") +
+  theme(axis.text = element_text(size = 15))
+# ggsave("figs/fig4.png", height = 3, width = 5)
+```
+
+## Color
+### Data Preparation
+```{r color data preparation}
+tsa_data_color <- tsa_data %>% drop_na(color_pattern)
+tsa_data_color %>% 
+  count(age_factor, group_size, color_pattern)
+```
+
+### Model
+```{r color model}
+mod_color <- func_brm(formula = color_pattern ~ group_size * group_mean_age_standardized + location,
+                      data = tsa_data_color,
+                      family = "categorical"(refcat = "no_pattern"),
+                      priors = c(set_prior("normal(0, 1.00)", class = "Intercept", dpar = "mualternate"),
+                                 set_prior("normal(0, 1.00)", class = "Intercept", dpar = "mufirstsuccessful"),
+                                 set_prior("normal(0, .70)", class = "b", dpar = "mualternate"),
+                                 set_prior("normal(0, .70)", class = "b", dpar = "mufirstsuccessful")))
+```
+
+### Posterior Checks
+```{r color posterior checks}
+# pp_check(mod_color, type = "bars_grouped", group = "group_size", ndraws = 100)
+# plot(mod_color)
+
+# p values
+yrep <- posterior_predict(mod_color)
+yrep_props <- apply(yrep, # matrix to vectorize function over
+                    1, # rowwise vectorization
+                    function(x) as.data.frame(prop.table(table(factor(x)))) %>% 
+                      mutate(Var1 = case_when(Var1 == 1 ~ attr(yrep, "levels")[1], # get the internal level assigned to 1
+                                              Var1 == 2 ~ attr(yrep, "levels")[2], # same for 2
+                                              Var1 == 3 ~ attr(yrep, "levels")[3], # same for 3
+                                              T ~ NA))) 
+
+yrep_props_tibble0 <- bind_rows(yrep_props, .id = "draw") %>% # convert list to tibble
+  as_tibble() %>% 
+  rename(response = Var1, # rename vars
+         predicted_proportion = Freq)
+
+yrep_props_tibble0 %>% # sometimes, posterior_predict will generate zero counts for a category within a simulated dataset. this quantifies the number of times that that happened.
+  count(response) %>% 
+  mutate(zero_predicted = dim(yrep)[1] - n) # number of simulated datasets without that category represented
+
+yrep_props_tibble <- yrep_props_tibble0 %>% # account for the zeros, above
+  complete(draw, response, fill = list(predicted_proportion = 0)) %>% 
+  left_join(
+    tibble(response = mod_color$data[["color_pattern"]]) %>% # get observed data
+      count(response, name = "observed_n") %>% # count up the observed responses by category
+      mutate(observed_proportion = observed_n / sum(observed_n))) %>% # compute observed proportion
+  mutate(prediction_exceeds_observation = ifelse(predicted_proportion > observed_proportion, 1, 0)) # compute whether predicted exceeds observed
+
+mod_color_p_vals <- yrep_props_tibble %>% group_by(response) %>% summarize(bayes_p_val = mean(prediction_exceeds_observation)) # compute category-wise bayesian p-values
+```
+
+### Results
+#### Posterior Draws
+```{r color posterior draws}
+newdata_mod_color <- crossing(group_size = mod_color$data$group_size %>% fct_unique() %>% fct_drop(),
+                              location = mod_color$data$location %>% fct_unique() %>% fct_drop(),
+                              group_mean_age_standardized = seq(from = min(mod_color$data$group_mean_age_standardized),
+                                                                to = max(mod_color$data$group_mean_age_standardized),
+                                                                length.out = 20))
+
+tibble(posterior_samples(mod_color) %>% 
+  select(contains("Triad") & contains("mufirstsuccessful"))) %>% 
+  clean_names() %>% 
+  summarize(hdi = hdi(b_mufirstsuccessful_group_sizetriad_group_mean_age_standardized),
+            mean = mean(b_mufirstsuccessful_group_sizetriad_group_mean_age_standardized))
+
+epred_mod_color <- local({
+  set.seed(27707) # reproducible subsampling of posterior draws
+  epred_draws(mod_color, newdata = newdata_mod_color, ndraws = n_epred_draws)
+}) %>% 
+  ungroup %>% 
+  mutate(group_mean_age = group_mean_age_standardized * sd(tsa_data$group_mean_age) + mean(tsa_data$group_mean_age),
+         age_factor = factor(ifelse(group_mean_age >= 3, "3-Year-Olds", "2-Year-Olds")), # make categorical age var
+         group_size = factor(str_to_title(as.character(group_size))),
+         group = factor(case_when(age_factor == "2-Year-Olds" & group_size == "Dyad" ~ "2-yo Dyad",
+                                  age_factor == "3-Year-Olds" & group_size == "Dyad" ~ "3-yo Dyad",
+                                  age_factor == "2-Year-Olds" & group_size == "Triad" ~ "2-yo Triad",
+                                  age_factor == "3-Year-Olds" & group_size == "Triad" ~ "3-yo Triad"),
+                        levels = c("3-yo Dyad", "3-yo Triad", "2-yo Dyad", "2-yo Triad")),
+         .category = case_when(.category == "alternate" ~ "Alternate",
+                               .category == "first_successful" ~ "First Suc.",
+                               .category == "no_pattern" ~ "No Pattern",
+                               T ~ NA))
+```
+
+#### Categorical Age
+```{r color categorical age}
+epred_mod_color_draws <- epred_mod_color %>% 
+  group_by(.draw, group_size, age_factor, .category) %>% 
+  summarize(mean_epred = mean(.epred)) %>% 
+  ungroup()
+
+epred_mod_color_draws_contrasts <- epred_mod_color_draws %>% 
+  group_by(group_size, age_factor) %>% 
+  compare_levels(mean_epred, ".category") 
+
+chance_strat <- .2895975 # see supplement for computation of chance
+
+epred_mod_color_draws_summary <- epred_mod_color_draws %>% 
+  group_by(age_factor, group_size, .category) %>% 
+  summarize(prop_gt = mean(mean_epred > chance_strat), 
+            hdi_lo = hdi(mean_epred)[ncol(hdi(mean_epred)) - 1],
+            mean_mean_epred = mean(mean_epred),
+            hdi_hi = hdi(mean_epred)[ncol(hdi(mean_epred))],
+            prop_gt_char = sprintf("%.0f%%", 100 * prop_gt))
+            
+epred_mod_color_draws_contrasts %>% 
+  group_by(age_factor, group_size, .category) %>% 
+  summarize(prop_gt = mean(mean_epred > 0),
+            hdi_lo = quantile(mean_epred)[ncol(hdi(mean_epred)) - 1],
+            mean_mean_epred = mean(mean_epred),
+            hdi_hi = hdi(mean_epred)[ncol(hdi(mean_epred))]) %>% 
+  ungroup()
+
+# fig5
+tsa_data_color %>% 
+  mutate(age_factor = paste0(age_factor, "-Year-Olds"),
+         group_size = str_to_title(group_size),
+         color_pattern = case_when(color_pattern == "alternate" ~ "Alternate",
+                                   color_pattern == "first_successful" ~ "First Suc.",
+                                   color_pattern == "no_pattern" ~ "No Pattern")) %>% 
+  ggplot(aes(y = color_pattern)) +
+  geom_bar(fill = "forestgreen") +
+  facet_grid(group_size ~ age_factor) +
+  theme_classic(base_size = 17, base_family = "Times New Roman") +
+  scale_x_continuous(breaks = c(0, 2, 4, 6, 8)) +
+  labs(x = "Number of Groups",
+       y = "Color Strategy") +
+  theme(axis.text = element_text(size = 15))
+# ggsave("figs/fig5.png", height = 3, width = 5)
+
+fig_color <- ggplot(epred_mod_color_draws,
+                aes(y = .category, x = mean_epred)) +
+  stat_halfeye(aes(fill = after_stat(x < chance_strat)), .width = 0.95, slab_alpha = 0.6, slab_linewidth = 0.5, slab_color = "black") +
+  scale_fill_manual(values = c("TRUE" = "grey80", "FALSE" = "grey30"), guide = "none") +
+  geom_text(data = epred_mod_color_draws_summary,
+            aes(y = .category, x = hdi_hi + .03, label = prop_gt_char),
+            nudge_x = .1,
+            size = 4.5,
+            vjust = -.8,
+            family = "Times New Roman",
+            fontface = "bold",
+            color = "grey30") +
+  geom_vline(xintercept = chance_strat, linetype = 2, linewidth = .5, alpha = .5, color = "grey40") +
+  facet_grid(group_size ~ age_factor, scales = "free") +
+  labs(x = "Predicted Rate",
+       y = "Color Strategy") +
+  scale_x_continuous(
+    labels = function(x) sub("^0+", "", format(x, trim = TRUE)),
+    breaks = c(0, round(chance_strat, 2), .75),
+    limits = c(NA, 1.03)
+  ) +
+  theme_classic(base_size = 17, base_family = "Times New Roman") +
+  theme(axis.text = element_text(size = 14))
+# ggsave("figs/sup_fig3.png", height = 5, width = 6)
+```
+
+```{r supplementary tables}
+# Create custom table functions, model lists
+func_sup_tab <- function(df){
+  flextable(df) %>% 
+    autofit() %>% # shrink to fit content
+    font(fontname = "Times New Roman", part = "all") %>% # font
+    fontsize(size = 11, part = "all") %>% # font size
+    set_table_properties(width = 1, layout = "autofit") %>% # scale to page width
+    border_remove() %>% # remove all borders first
+    hline(i = 1, border = fp_border_default(), part = "header") %>% # line below header
+    align(align = "center", part = "all") # center all cells
+}
+
+func_mod_tab <- function(model){
+  diag_df <- summarise_draws(model) %>%
+    filter(str_starts(variable, "b_")) %>%
+    select(parameter = variable, ess_bulk, rhat) %>% 
+    mutate(ess_bulk = round(ess_bulk, 0),
+           rhat = round(rhat, 2))
+  as_draws_df(model) %>%  # model posterior fixed effects
+    select(starts_with("b_")) %>% 
+    pivot_longer(everything(), names_to = "parameter") %>%
+    group_by(parameter) %>% 
+    summarize(mean = mean(value),
+              sd = sd(value),
+              q2.5 = quantile(value, 0.025),
+              q97.5 = quantile(value, 0.975),
+              .groups = "drop") %>% 
+    left_join(diag_df, by = "parameter") %>%
+    mutate(across(c(mean, sd, q2.5, q97.5, rhat), ~ formatC(.x, format = "f", digits = 2)),
+           parameter = str_to_title(str_replace_all(str_replace_all(str_remove_all(parameter, "b_"), "_", " "), ":", " : ")),
+           parameter = str_replace_all(parameter, "Locationschool", "Location (School)"),
+           parameter = str_replace_all(parameter, "Mualternate", "(Alternate)"),
+           parameter = str_replace_all(parameter, "Mufirstsuccessful", "(First Suc.)"),
+           parameter = str_replace_all(parameter, "Sizetriad", "Size (Triad)"),
+           parameter = str_replace_all(parameter, "N Inits Perprompt Stand", "Communication"),
+           parameter = str_replace_all(parameter, "Familiarityunfamiliar", "Familiar. (Unfam.)"),
+           parameter = str_remove_all(parameter, "Standardized"),
+           parameter = str_replace_all(parameter, "Age Factor3", "Group Mean Age (3-yo's)"),
+           parameter = str_replace_all(parameter, "Prop", "Proportion"),
+           parameter = str_replace_all(parameter, "Outcomesuccessful", "Outcome"),
+           parameter = str_replace_all(parameter, "Recoded1", "(1)"),
+           parameter = str_replace_all(parameter, "Recoded2p", "(2+)")) %>% 
+    rename_with(~ stringr::str_replace_all(.x, "_", " "), everything()) %>% 
+    rename_with(stringr::str_to_title, everything()) %>% 
+    rename(SD = Sd, ESS = "Ess Bulk", "R-Hat" = Rhat)
+}
+
+mods_list <- list("Engagement" = mod_engagement, 
+                  "Coordination" = mod_success, 
+                  "Coordination-Comm." = mod_success_comm, 
+                  "Communication" = mod_comm, 
+                  "Strategy" = mod_strategy, 
+                  "Color" = mod_color)
+
+# sup_tab1 (model formulas)
+sup_tab1 <- map_dfr(mods_list,
+                    ~ as_tibble(paste(deparse(.x$formula$formula), 
+                                      collapse = "") %>% # remove extra line added by deparse()
+                                  str_squish()) %>% # remove extra whitespace
+                      mutate(Observations = nobs(.x), # record observation count
+                             Groups = length(unique(.x$data$group_id))),
+                    .id = "Model") %>% 
+  rename(Formula = value)
+sup_tab1_ft <- func_sup_tab(sup_tab1)
+# save_as_docx(sup_tab1_ft, path = "tables/sup_tab1.docx")
+
+# sup_tab2 (priors, distributional families, link functions)
+sup_tab2 <- map_dfr(mods_list, # perform the following operation on each list item
+                    ~ as_tibble(.x$prior) %>% # priors
+                      mutate(as_tibble(.x$family[1]), # distributional family
+                             as_tibble(.x$family[2])), # link function
+                    .id = "model") %>% 
+  filter(source == "user") %>% # include only user-specified priors
+  select(model, prior, class, dpar, lb, family, link) %>% 
+  relocate(family, .after = model) %>% 
+  relocate(link, .after = family) %>% 
+  rename_with(.fn = ~str_to_title(.), .cols = everything(.)) %>% 
+  mutate(across(c(Family, Link), ~ str_to_title(.)))
+sup_tab2_ft <- func_sup_tab(sup_tab2)
+# save_as_docx(sup_tab2_ft, path = "tables/sup_tab2.docx")
+
+# sup_tab3 (bayesian p values)
+sup_tab3 <- tibble(Model = c("Engagement", "Coordination", "Coordination-Comm.", "Communication", "Strategy", "Color (Alternate)", "Color (First Suc.)", "Color (No Pat.)"),
+                   "Bayesian p value" = c(func_bayesian_p_val(mod = mod_engagement, responsevar = "engagement_factor"),
+                                          func_bayesian_p_val(mod = mod_success, responsevar = "outcome"),
+                                          func_bayesian_p_val(mod = mod_success_comm, responsevar = "outcome"),
+                                          func_bayesian_p_val(mod = mod_comm, responsevar = "communication"),
+                                          func_bayesian_p_val(mod = mod_strategy, responsevar = "collab_yesno"),
+                                          mod_color_p_vals %>% filter(response == "alternate") %>% pull(bayes_p_val),
+                                          mod_color_p_vals %>% filter(response == "first_successful") %>% pull(bayes_p_val),
+                                          mod_color_p_vals %>% filter(response == "no_pattern") %>% pull(bayes_p_val))) %>% 
+  mutate(across(starts_with("Bayesian"), ~round(., 2)),
+         across(starts_with("Bayesian"), ~sub("^0", "", .x)))
+sup_tab3_ft <- func_sup_tab(sup_tab3)
+# save_as_docx(sup_tab3_ft, path = "tables/sup_tab3.docx")
+
+# sup_tab4 (posterior parameters)
+sup_tab4 <- map_dfr(mods_list, 
+                ~ func_mod_tab(.x),
+                .id = "Model")
+sup_tab4_ft <- func_sup_tab(sup_tab4)
+# save_as_docx(sup_tab4_ft, path = "tables/sup_tab4.docx")
+```
+
+# Session Info
+```{r supplementary tables}
+end <- Sys.time()
+end - start # script runtime
+sessionInfo()
+```
+
+# Supplemental Figures
+```{r}
+
+```
+

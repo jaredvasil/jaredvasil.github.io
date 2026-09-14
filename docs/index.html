@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Jared Vasil</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -31,15 +34,14 @@ ul.task-list li input[type="checkbox"] {
 <meta name="quarto:offset" content="./">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-2ec1ecde4794cf0ca2676fdbadd3167b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-4360c678b5099ca041644eb02eaa1bfe.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -90,17 +92,38 @@ ul.task-list li input[type="checkbox"] {
 <h1>Hello!</h1>
 <p><img src="cowboy_hat_edited.png" class="img-fluid" style="border-radius: 50%; object-fit: cover; object-position: center 30%" width="200"></p>
 </section>
-<p>My name is Jared Vasil (<a href="papers/cv_mar26.pdf">CV</a>, <a href="https://scholar.google.com/citations?user=h2CNbSMAAAAJ&amp;hl=en">Google Scholar</a>). I am a developmental psychologist interested in how people think about themselves. To study this topic, I investigate young children’s social and communicative behavior, like their joint commitment and linguistic reference.</p>
-<p>Currently, I am a Postdoctoral Research Associate in Marjorie Rhodes’ Conceptual Developmental and Social Cognition Lab at New York University. I earned my PhD from Duke University in 2024 under the supervision of Michael Tomasello.</p>
+<p>My name is Jared Vasil (<a href="papers/cv_mar26.pdf">CV</a>, <a href="https://scholar.google.com/citations?user=h2CNbSMAAAAJ&amp;hl=en">Google Scholar</a>). I am a developmental psychologist interested in how people think about themselves (“self-conception”). To study this topic, I investigate the communicative and social behavior of children and chimpanzees.</p>
+<p>Currently, I am a Postdoctoral Fellow at the <a href="https://www.possibleminds.org/">Center for Possible Minds</a> and in the <a href="https://www.comparelab.org/">COMPARE Lab</a> at Indiana University. I earned my PhD from Duke University in 2024 under the supervision of Michael Tomasello.</p>
 <p>Below are my peer-reviewed journal articles with their associated data and code.</p>
-<p><strong>keywords</strong>: communication, conceptualization, development, evolution, Bayes</p>
+<p><strong>keywords</strong>: development; evolution; self-conception; communication; collaboration; Bayes</p>
 <section id="peer-reviewed-journal-articles" class="level1">
 <h1>Peer-Reviewed Journal Articles</h1>
 <p>PDFs of either the published article or the accepted manuscript are hyperlinked. Asterisks indicate mentees. These individuals contributed substantively to study conceptualization, design, data collection, and analysis <em>en route</em> to a thesis.</p>
-<p><em>Replication instructions</em>: Data and code are below their associated publication. Clicking the “data and code” hyperlink will download a .zip file. Inside of this .zip file is a folder system with a .Rproj file. The published analysis can be reproduced by running the .r or .rmd script within the .Rproj file. The folder system is preconfigured so that the entire analysis pipeline - from data import to posterior inference, including figures and tables - can be completed in one command (plus commands for package installation, if any).</p>
-<p>I principally use tools from <a href="https://cran.r-project.org/web/packages/tidyverse/index.html">tidyverse</a> for data manipulation, <a href="https://cran.r-project.org/web/packages/brms/index.html">brms</a> for modeling, <a href="https://cran.r-project.org/web/packages/posterior/index.html">posterior</a> for posterior analysis, and <a href="https://cran.r-project.org/web/packages/tidybayes/index.html">tidybayes</a> for visualization. All errors are my responsibility.</p>
+<p><em>Instructions</em>: Data and code are below their associated publication. Clicking the “data and code” hyperlink will download a .zip file. Inside of this .zip file is a folder system with a .Rproj file. The published analysis can be reproduced by running the .r or .rmd script within the .Rproj file. The folder system is configured so that the entire analysis pipeline - from data import to posterior inference, including figures and tables - can be completed in one command (plus commands for package installation, if any).</p>
+<p>I principally use tools from <a href="https://cran.r-project.org/web/packages/tidyverse/index.html">tidyverse</a> for data manipulation, <a href="https://cran.r-project.org/web/packages/brms/index.html">brms</a> for modeling, <a href="https://cran.r-project.org/web/packages/posterior/index.html">posterior</a> for posterior analysis, and <a href="https://cran.r-project.org/web/packages/tidybayes/index.html">tidybayes</a> for visualization.</p>
 <section id="articles" class="level2">
 <h2 class="anchored" data-anchor-id="articles">Articles</h2>
+<ol start="14" type="1">
+<li><strong>Vasil</strong>, J., &amp; Tomasello, M. Inferrables and Four-Year-Olds’ Referential Informativeness. (2026). <em>Journal of Child Language</em>.
+<ul>
+<li>Data and code</li>
+</ul></li>
+</ol>
+<!-- -->
+<ol start="13" type="1">
+<li><a href="papers/rivero_vasil_tomasello_26.pdf">Rivero, A., <strong>Vasil, J.</strong>, &amp; Tomasello, M. (2026). Two- and three-year-olds coordinate decisions in dyads and triads. <em>Child Development</em>.</a>
+<ul>
+<li><a href="data_and_code/data_and_code_for_rivero_vasil_tomasello_26.zip">Data and code</a></li>
+</ul></li>
+</ol>
+<!-- -->
+<ol start="12" type="1">
+<li><a href="papers/yilmaz_vasil_rhodes_26.pdf">Yilmaz, D., <strong>Vasil</strong>, J., Rhodes, M. (2026). Effects of Generics and Contextual Cues on 3- and 4-Year-Olds’ Normative Inferences. <em>Proceedings of the Cognitive Science Society</em>.</a>
+<ul>
+<li>See paper for data and code link.</li>
+</ul></li>
+</ol>
+<!-- -->
 <ol start="11" type="1">
 <li><a href="papers/li_vasil_25.pdf">Li, L., &amp; <strong>Vasil</strong>, J. (2025). Phylogenetic, ontogenetic, and logical critiques of mental state minimalism. <em>European Journal of Developmental Psychology</em>, 1–14. https://doi.org/10.1080/17405629.2025.2607730</a></li>
 </ol>

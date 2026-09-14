@@ -8,23 +8,38 @@ format: html
 ![](cowboy_hat_edited.png){style="border-radius: 50%; object-fit: cover; object-position: center 30%" width="200"}
 :::
 
-My name is Jared Vasil ([CV](papers/cv_mar26.pdf), [Google Scholar](https://scholar.google.com/citations?user=h2CNbSMAAAAJ&hl=en)). I am a developmental psychologist interested in how people think about themselves. To study this topic, I investigate young children's social and communicative behavior, like their joint commitment and linguistic reference.
+My name is Jared Vasil ([CV](papers/cv_mar26.pdf), [Google Scholar](https://scholar.google.com/citations?user=h2CNbSMAAAAJ&hl=en)). I am a developmental psychologist interested in how people think about themselves ("self-conception"). To study this topic, I investigate the communicative and social behavior of children and chimpanzees.
 
-Currently, I am a Postdoctoral Research Associate in Marjorie Rhodes' Conceptual Developmental and Social Cognition Lab at New York University. I earned my PhD from Duke University in 2024 under the supervision of Michael Tomasello.
+Currently, I am a Postdoctoral Fellow at the [Center for Possible Minds](https://www.possibleminds.org/) and in the [COMPARE Lab](https://www.comparelab.org/) at Indiana University. I earned my PhD from Duke University in 2024 under the supervision of Michael Tomasello.
 
 Below are my peer-reviewed journal articles with their associated data and code.
 
-**keywords**: communication, conceptualization, development, evolution, Bayes
+**keywords**: development; evolution; self-conception; communication; collaboration; Bayes
 
 # Peer-Reviewed Journal Articles
 
 PDFs of either the published article or the accepted manuscript are hyperlinked. Asterisks indicate mentees. These individuals contributed substantively to study conceptualization, design, data collection, and analysis *en route* to a thesis.
 
-*Replication instructions*: Data and code are below their associated publication. Clicking the "data and code" hyperlink will download a .zip file. Inside of this .zip file is a folder system with a .Rproj file. The published analysis can be reproduced by running the .r or .rmd script within the .Rproj file. The folder system is preconfigured so that the entire analysis pipeline - from data import to posterior inference, including figures and tables - can be completed in one command (plus commands for package installation, if any).
+*Instructions*: Data and code are below their associated publication. Clicking the "data and code" hyperlink will download a .zip file. Inside of this .zip file is a folder system with a .Rproj file. The published analysis can be reproduced by running the .r or .rmd script within the .Rproj file. The folder system is configured so that the entire analysis pipeline - from data import to posterior inference, including figures and tables - can be completed in one command (plus commands for package installation, if any).
 
-I principally use tools from [tidyverse](https://cran.r-project.org/web/packages/tidyverse/index.html) for data manipulation, [brms](https://cran.r-project.org/web/packages/brms/index.html) for modeling, [posterior](https://cran.r-project.org/web/packages/posterior/index.html) for posterior analysis, and [tidybayes](https://cran.r-project.org/web/packages/tidybayes/index.html) for visualization. All errors are my responsibility.
+I principally use tools from [tidyverse](https://cran.r-project.org/web/packages/tidyverse/index.html) for data manipulation, [brms](https://cran.r-project.org/web/packages/brms/index.html) for modeling, [posterior](https://cran.r-project.org/web/packages/posterior/index.html) for posterior analysis, and [tidybayes](https://cran.r-project.org/web/packages/tidybayes/index.html) for visualization.
 
 ## Articles
+
+14. **Vasil**, J., & Tomasello, M. Inferrables and Four-Year-Olds’ Referential Informativeness. (2026). *Journal of Child Language*.
+    - Data and code
+
+<!-- -->
+
+13. [Rivero, A., **Vasil, J.**, & Tomasello, M. (2026). Two- and three-year-olds coordinate decisions in dyads and triads. *Child Development*.](papers/rivero_vasil_tomasello_26.pdf)
+    - [Data and code](data_and_code/data_and_code_for_rivero_vasil_tomasello_26.zip)
+
+<!-- -->
+
+12. [Yilmaz, D., **Vasil**, J., Rhodes, M. (2026). Effects of Generics and Contextual Cues on 3- and 4-Year-Olds’ Normative Inferences. *Proceedings of the Cognitive Science Society*.](papers/yilmaz_vasil_rhodes_26.pdf)
+    - See paper for data and code link.
+
+<!-- -->
 
 11. [Li, L., & **Vasil**, J. (2025). Phylogenetic, ontogenetic, and logical critiques of mental state minimalism. *European Journal of Developmental Psychology*, 1–14. https://doi.org/10.1080/17405629.2025.2607730](papers/li_vasil_25.pdf)
 
@@ -35,17 +50,17 @@ I principally use tools from [tidyverse](https://cran.r-project.org/web/packages
 <!-- -->
 
 9.  [**Vasil**, J., Provençal\*, M., & Tomasello, M. (2024). Effects of “We”-framing and partner number on 2- and 3-year-olds’ sense of commitment. *Cognitive Development*, *72*, 101511. https://doi.org/10.1016/j.cogdev.2024.101511](papers/vasil_provencal_tomasello_24.pdf)
-    -   [Data and code](data_and_code/data_and_code_for_vasil_provencal_tomasello_2024.zip)
+    - [Data and code](data_and_code/data_and_code_for_vasil_provencal_tomasello_2024.zip)
 
 <!-- -->
 
 8.  [**Vasil**, J., Price\*, D., & Tomasello, M. (2024). Thought and language: Effects of group-mindedness on young children’s interpretation of exclusive we. *Child Development*, *95*(3), e155–e163. https://doi.org/10.1111/cdev.14049](papers/vasil_price_tomasello_24.pdf)
-    -   [Data and code](data_and_code/data_and_code_for_vasil_price_tomasello_2024.zip)
+    - [Data and code](data_and_code/data_and_code_for_vasil_price_tomasello_2024.zip)
 
 <!-- -->
 
 7.  [**Vasil**, J., Capoot\*, C., & Tomasello, M. (2024). Effects of group entitativity on young English-speaking children’s interpretation of inclusive We. *PLOS ONE*, *19*(7), e0306556. https://doi.org/10.1371/journal.pone.0306556](papers/vasil_capoot_tomasello_24.pdf)
-    -   [Data and code](data_and_code/data_and_code_for_vasil_capoot_tomasello_2024.zip)
+    - [Data and code](data_and_code/data_and_code_for_vasil_capoot_tomasello_2024.zip)
 
 <!-- -->
 
@@ -54,12 +69,12 @@ I principally use tools from [tidyverse](https://cran.r-project.org/web/packages
 <!-- -->
 
 5.  [**Vasil**, J., Moore, C., & Tomasello, M. (2023). Thought and language: Association of groupmindedness with young English-speaking children’s production of pronouns. *First Language*, *43*(5), 516–538. https://doi.org/10.1177/01427237231169398](papers/vasil_moore_tomasello_23.pdf)
-    -   [Data and code (redirects to OSF repository due to large data file)](https://osf.io/65wex/overview)
+    - [Data and code (redirects to OSF repository due to large data file)](https://osf.io/65wex/overview)
 
 <!-- -->
 
 4.  [**Vasil**, J., & Tomasello, M. (2022). Effects of “we”-framing on young children’s commitment, sharing, and helping. *Journal of Experimental Child Psychology*, *214*, 105278. https://doi.org/10.1016/j.jecp.2021.105278](papers/vasil_tomasello_22.pdf)
-    -   [Data and code](data_and_code/data_and_code_for_vasil_tomasello_2022.zip)
+    - [Data and code](data_and_code/data_and_code_for_vasil_tomasello_2022.zip)
 
 <!-- -->
 
