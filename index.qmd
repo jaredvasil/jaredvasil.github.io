@@ -37,7 +37,7 @@ I principally use tools from [tidyverse](https://cran.r-project.org/web/packages
 <!-- -->
 
 12. [Yilmaz, D., **Vasil**, J., Rhodes, M. (2026). Effects of Generics and Contextual Cues on 3- and 4-Year-Olds’ Normative Inferences. *Proceedings of the Cognitive Science Society*.](papers/yilmaz_vasil_rhodes_26.pdf)
-    - See paper for data and code link.
+    - Contact corresponding author for data and code.
 
 <!-- -->
 
