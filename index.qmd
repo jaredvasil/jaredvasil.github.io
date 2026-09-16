@@ -26,7 +26,7 @@ I principally use tools from [tidyverse](https://cran.r-project.org/web/packages
 
 ## Articles
 
-14. **Vasil**, J., & Tomasello, M. Inferrables and Four-Year-Olds’ Referential Informativeness. (2026). *Journal of Child Language*.
+14. **Vasil**, J., & Tomasello, M. Cultural Common Ground and Four-Year-Olds’ Referential Informativeness. (2026). *Journal of Child Language*.
     - [Data and code](data_and_code/data_and_code_for_vasil_tomasello_2026.zip)
 
 <!-- -->
