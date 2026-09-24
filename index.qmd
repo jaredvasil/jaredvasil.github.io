@@ -22,8 +22,6 @@ PDFs of either the published article or the accepted manuscript are hyperlinked.
 
 *Instructions*: Data and code are hyperlinked below their associated publication. Clicking the hyperlink will download a .zip file. Inside of this .zip file is a folder system with a .Rproj file. The published analysis can be reproduced by running the .r or .rmd script within the .Rproj file. The folder system is configured so that the entire analysis pipeline - from data import to posterior inference, including figures and tables - can be completed in one command (plus commands for package installation, if any).
 
-I principally use tools from [tidyverse](https://cran.r-project.org/web/packages/tidyverse/index.html) for data manipulation, [brms](https://cran.r-project.org/web/packages/brms/index.html) for modeling, [posterior](https://cran.r-project.org/web/packages/posterior/index.html) for posterior analysis, and [tidybayes](https://cran.r-project.org/web/packages/tidybayes/index.html) for visualization.
-
 ## Articles
 
 14. [**Vasil**, J., & Tomasello, M. Cultural Common Ground and Four-Year-Olds’ Referential Informativeness. (2026). *Journal of Child Language*.](papers/vasil_tomasello_26.pdf)
