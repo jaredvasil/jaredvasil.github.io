@@ -1,1 +1,16 @@
 /* css styles */
+/* Make all text white */
+body,
+body *,
+a,
+a:hover,
+.navbar-brand,
+.nav-link,
+.nav-link:hover {
+  color: #ffffff !important;
+}
+
+/* Keep links recognizable */
+a {
+  text-decoration: underline;
+}
