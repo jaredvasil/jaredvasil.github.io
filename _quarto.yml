@@ -1,6 +1,9 @@
 project:
   type: website
   output-dir: docs
+  render:
+    - index.qmd
+    - papers.qmd
 
 website:
   title: "Jared Vasil"
